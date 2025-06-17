@@ -5,6 +5,7 @@ import (
 	"haircompany-shop-rest/config"
 	"haircompany-shop-rest/internal/router"
 	"haircompany-shop-rest/pkg/database"
+	"haircompany-shop-rest/pkg/middleware"
 	"log"
 	"net/http"
 )
@@ -19,6 +20,7 @@ func main() {
 	cfg := config.LoadConfig()
 	db := database.NewDB(cfg)
 	r := router.NewRouter(db)
+	r = middleware.ChainMiddleware(r, middleware.LoggingMiddleware, middleware.RecoverMiddleware)
 
 	log.Printf("Starting server on :%s", cfg.AppPort)
 	log.Fatal(http.ListenAndServe(":"+cfg.AppPort, r))

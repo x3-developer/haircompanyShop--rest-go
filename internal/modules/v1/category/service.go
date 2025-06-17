@@ -47,13 +47,15 @@ func (c *service) Create(createDto dto.CreateDTO) (*dto.ResponseDTO, []response.
 		return nil, validationErrors, nil
 	}
 
-	existingParent, err := c.repo.GetById(*createDto.ParentID)
-	if err != nil || existingParent == nil {
-		validationErrors = append(validationErrors, response.ErrorField{
-			Field:     "parentId",
-			ErrorCode: string(response.NotFound),
-		})
-		return nil, validationErrors, nil
+	if createDto.ParentID != nil {
+		existingParent, err := c.repo.GetById(*createDto.ParentID)
+		if err != nil || existingParent == nil {
+			validationErrors = append(validationErrors, response.ErrorField{
+				Field:     "parentId",
+				ErrorCode: string(response.NotFound),
+			})
+			return nil, validationErrors, nil
+		}
 	}
 
 	categoryModel := TransformCreateDTOToModel(createDto)

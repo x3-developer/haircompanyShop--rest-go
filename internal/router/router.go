@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func NewRouter(db *database.DB) *http.ServeMux {
+func NewRouter(db *database.DB) http.Handler {
 	mux := http.NewServeMux()
 	v1 := http.NewServeMux()
 
