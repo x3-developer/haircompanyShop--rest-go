@@ -3,6 +3,7 @@ package image
 import (
 	"fmt"
 	"haircompany-shop-rest/internal/modules/v1/image/dto"
+	"haircompany-shop-rest/pkg/constraint"
 	"haircompany-shop-rest/pkg/response"
 	"mime/multipart"
 	"net/http"
@@ -26,7 +27,25 @@ func (h *Handler) Upload(w http.ResponseWriter, r *http.Request) {
 	}
 
 	form := r.MultipartForm
+	imageType := form.Value["imageType"]
+	if imageType == nil || len(imageType) == 0 || imageType[0] == "" {
+		msg := "imageType is required"
+		response.SendError(w, http.StatusBadRequest, msg, response.BadRequest)
+		return
+	}
+	if err := constraint.ValidateImageType(imageType[0]); err != nil {
+		msg := fmt.Sprintf("invalid imageType: %s", imageType[0])
+		response.SendError(w, http.StatusBadRequest, msg, response.BadRequest)
+		return
+	}
+
 	files := form.File["images"]
+	if err := constraint.ValidateImage(files, imageType[0]); err != nil {
+		msg := fmt.Sprintf("image validation failed: %v", err)
+		response.SendError(w, http.StatusBadRequest, msg, response.BadRequest)
+		return
+	}
+
 	var uploadedImages []*dto.ResponseDTO
 
 	for _, fileHeader := range files {

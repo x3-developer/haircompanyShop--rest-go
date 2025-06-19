@@ -3,8 +3,8 @@ package dto
 type CreateDTO struct {
 	Name            string `json:"name" validate:"required,min=3,max=255"`
 	Description     string `json:"description"`
-	Image           string `json:"image"`
-	HeaderImage     string `json:"headerImage"`
+	Image           string `json:"image" validate:"required"`
+	HeaderImage     string `json:"headerImage" validate:"required"`
 	Slug            string `json:"slug" validate:"required,min=3,max=255"`
 	ParentID        *uint  `json:"parentId"`
 	SortIndex       int    `json:"sortIndex" validate:"required,gte=0"`
