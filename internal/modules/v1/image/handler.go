@@ -7,6 +7,7 @@ import (
 	"haircompany-shop-rest/pkg/response"
 	"mime/multipart"
 	"net/http"
+	"strings"
 )
 
 type Handler struct {
@@ -20,9 +21,13 @@ func NewHandler(s Service) *Handler {
 }
 
 func (h *Handler) Upload(w http.ResponseWriter, r *http.Request) {
-	if err := r.ParseMultipartForm(10 << 20); err != nil {
-		msg := fmt.Sprintf("failed to parse multipart form: %v", err)
-		response.SendError(w, http.StatusBadRequest, msg, response.BadRequest)
+	r.Body = http.MaxBytesReader(w, r.Body, 50<<20)
+	if err := r.ParseMultipartForm(50 << 20); err != nil {
+		if strings.Contains(err.Error(), "http: request body too large") {
+			response.SendError(w, http.StatusRequestEntityTooLarge, "file too large", response.RequestTooLarge)
+			return
+		}
+		response.SendError(w, http.StatusBadRequest, fmt.Sprintf("failed to parse form: %v", err), response.BadRequest)
 		return
 	}
 
@@ -40,9 +45,15 @@ func (h *Handler) Upload(w http.ResponseWriter, r *http.Request) {
 	}
 
 	files := form.File["images"]
-	if err := constraint.ValidateImage(files, imageType[0]); err != nil {
+	errFields, err := constraint.ValidateImage(files, imageType[0])
+	if err != nil {
 		msg := fmt.Sprintf("image validation failed: %v", err)
 		response.SendError(w, http.StatusBadRequest, msg, response.BadRequest)
+		return
+	}
+	if errFields != nil {
+		msg := "validation errors occurred"
+		response.SendValidationError(w, http.StatusBadRequest, msg, response.BadRequest, errFields)
 		return
 	}
 

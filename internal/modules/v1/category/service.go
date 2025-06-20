@@ -32,16 +32,10 @@ func (c *service) Create(createDto dto.CreateDTO) (*dto.ResponseDTO, []response.
 	}
 	if existingCategory != nil {
 		if existingCategory.Name == createDto.Name {
-			validationErrors = append(validationErrors, response.ErrorField{
-				Field:     "name",
-				ErrorCode: string(response.NotUnique),
-			})
+			validationErrors = append(validationErrors, response.NewErrorField("name", string(response.NotUnique)))
 		}
 		if existingCategory.Slug == createDto.Slug {
-			validationErrors = append(validationErrors, response.ErrorField{
-				Field:     "slug",
-				ErrorCode: string(response.NotUnique),
-			})
+			validationErrors = append(validationErrors, response.NewErrorField("slug", string(response.NotUnique)))
 		}
 
 		return nil, validationErrors, nil
@@ -50,10 +44,7 @@ func (c *service) Create(createDto dto.CreateDTO) (*dto.ResponseDTO, []response.
 	if createDto.ParentID != nil {
 		existingParent, err := c.repo.GetById(*createDto.ParentID)
 		if err != nil || existingParent == nil {
-			validationErrors = append(validationErrors, response.ErrorField{
-				Field:     "parentId",
-				ErrorCode: string(response.NotFound),
-			})
+			validationErrors = append(validationErrors, response.NewErrorField("parentId", string(response.NotFound)))
 			return nil, validationErrors, nil
 		}
 	}

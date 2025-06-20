@@ -22,6 +22,13 @@ type errorResponse struct {
 	Fields    []ErrorField `json:"fields,omitempty"`
 }
 
+func NewErrorField(field, errorCode string) ErrorField {
+	return ErrorField{
+		Field:     field,
+		ErrorCode: errorCode,
+	}
+}
+
 func SendSuccess(w http.ResponseWriter, statusCode int, data any) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
