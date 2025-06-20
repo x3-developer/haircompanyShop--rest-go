@@ -2,6 +2,7 @@ package category
 
 import (
 	"haircompany-shop-rest/internal/modules/v1/category/dto"
+	"haircompany-shop-rest/internal/modules/v1/image"
 	"haircompany-shop-rest/pkg/response"
 	"log"
 )
@@ -15,12 +16,14 @@ type Service interface {
 }
 
 type service struct {
-	repo Repository
+	repo         Repository
+	imageService image.Service
 }
 
 func NewService(r Repository) Service {
 	return &service{
-		repo: r,
+		repo:         r,
+		imageService: image.NewService(),
 	}
 }
 
@@ -54,6 +57,11 @@ func (c *service) Create(createDto dto.CreateDTO) (*dto.ResponseDTO, []response.
 	if err != nil {
 		return nil, nil, err
 	}
+
+	filenames := []string{categoryModel.Image, categoryModel.HeaderImage}
+	go func() {
+		c.imageService.MoveImageToPermanent(filenames, "category")
+	}()
 
 	createdCategoryResponse := TransformModelToResponseDTO(createdCategory)
 

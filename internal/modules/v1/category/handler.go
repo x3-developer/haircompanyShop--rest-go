@@ -28,9 +28,10 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := constraint.ValidateDTO(createDto); err != nil {
-		msg := fmt.Sprintf("validation error: %v", err)
-		response.SendError(w, http.StatusBadRequest, msg, response.BadRequest)
+	errFields := constraint.ValidateDTO(createDto)
+	if errFields != nil {
+		msg := "validation errors occurred"
+		response.SendValidationError(w, http.StatusBadRequest, msg, response.BadRequest, errFields)
 		return
 	}
 

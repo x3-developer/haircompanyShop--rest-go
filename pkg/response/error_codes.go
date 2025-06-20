@@ -11,4 +11,20 @@ const (
 	RequestTooLarge  ErrorCode = "REQUEST_TOO_LARGE"
 	FileTooLarge     ErrorCode = "FILE_TOO_LARGE"
 	InvalidFileType  ErrorCode = "INVALID_FILE_TYPE"
+	NotBlank         ErrorCode = "NOT_BLANK"
+	MinLength        ErrorCode = "MIN_LENGTH"
+	MaxLength        ErrorCode = "MAX_LENGTH"
 )
+
+func GetErrorCodeByTag(tag string) ErrorCode {
+	switch tag {
+	case "required":
+		return NotBlank
+	case "min":
+		return MinLength
+	case "max":
+		return MaxLength
+	default:
+		return ServerError
+	}
+}

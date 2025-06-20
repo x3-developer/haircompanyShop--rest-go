@@ -76,7 +76,7 @@ func (h *Handler) Upload(w http.ResponseWriter, r *http.Request) {
 				}
 			}(file)
 
-			imageDTO, err := h.svc.UploadImage(file, fileHeader.Filename)
+			imageDTO, err := h.svc.UploadImageToTemp(file, fileHeader.Filename)
 			if err != nil {
 				msg := fmt.Sprintf("failed to upload image: %v", err)
 				response.SendError(w, http.StatusInternalServerError, msg, response.ServerError)

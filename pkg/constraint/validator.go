@@ -8,10 +8,25 @@ import (
 	"mime/multipart"
 )
 
-func ValidateDTO(dto interface{}) error {
+func ValidateDTO(dto interface{}) []response.ErrorField {
+	var errorFields []response.ErrorField
 	validate := validator.New()
 
-	return validate.Struct(dto)
+	err := validate.Struct(dto)
+	if err != nil {
+		var validationErrors validator.ValidationErrors
+		if errors.As(err, &validationErrors) {
+			for _, ve := range validationErrors {
+				fieldName := ve.Field()
+				tag := ve.Tag()
+				errorCode := response.GetErrorCodeByTag(tag)
+
+				errorFields = append(errorFields, response.NewErrorField(fieldName, string(errorCode)))
+			}
+		}
+	}
+
+	return errorFields
 }
 
 func ValidateImageType(t string) error {
