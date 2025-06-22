@@ -1,10 +1,13 @@
 package category
 
 import (
+	"context"
 	"haircompany-shop-rest/internal/modules/v1/category/dto"
-	"haircompany-shop-rest/internal/modules/v1/image"
+	"haircompany-shop-rest/internal/services"
 	"haircompany-shop-rest/pkg/response"
+	"haircompany-shop-rest/pkg/utils"
 	"log"
+	"sync"
 )
 
 type Service interface {
@@ -16,14 +19,18 @@ type Service interface {
 }
 
 type service struct {
-	repo         Repository
-	imageService image.Service
+	repo        Repository
+	fileService services.FileSystemService
+	ctx         context.Context
+	wg          *sync.WaitGroup
 }
 
-func NewService(r Repository) Service {
+func NewService(r Repository, fs services.FileSystemService, ctx context.Context, wg *sync.WaitGroup) Service {
 	return &service{
-		repo:         r,
-		imageService: image.NewService(),
+		repo:        r,
+		fileService: fs,
+		ctx:         ctx,
+		wg:          wg,
 	}
 }
 
@@ -59,9 +66,16 @@ func (c *service) Create(createDto dto.CreateDTO) (*dto.ResponseDTO, []response.
 	}
 
 	filenames := []string{categoryModel.Image, categoryModel.HeaderImage}
-	go func() {
-		c.imageService.MoveImageToPermanent(filenames, "category")
-	}()
+	utils.SafeGo(c.ctx, c.wg, "MoveImageToPermanent", func(ctx context.Context) {
+		if ctx.Err() != nil {
+			log.Println("context cancelled, skipping image move")
+			return
+		}
+
+		if err := c.fileService.MoveToPermanent(filenames, "images/category"); err != nil {
+			log.Printf("error moving images to permanent storage: %v", err)
+		}
+	})
 
 	createdCategoryResponse := TransformModelToResponseDTO(createdCategory)
 

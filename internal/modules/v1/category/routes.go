@@ -1,14 +1,18 @@
 package category
 
 import (
+	"context"
+	"haircompany-shop-rest/internal/services"
 	"haircompany-shop-rest/pkg/database"
 	"haircompany-shop-rest/pkg/response"
 	"net/http"
+	"sync"
 )
 
-func RegisterV1CategoryRoutes(mux *http.ServeMux, db *database.DB) {
+func RegisterV1CategoryRoutes(mux *http.ServeMux, db *database.DB, ctx context.Context, wg *sync.WaitGroup) {
+	fileSvc := services.NewFileSystemService()
 	repo := NewRepository(db)
-	svc := NewService(repo)
+	svc := NewService(repo, fileSvc, ctx, wg)
 	h := NewHandler(svc)
 
 	mux.HandleFunc("/category/create", func(w http.ResponseWriter, r *http.Request) {

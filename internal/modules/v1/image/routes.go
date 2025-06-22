@@ -1,12 +1,14 @@
 package image
 
 import (
+	"haircompany-shop-rest/internal/services"
 	"haircompany-shop-rest/pkg/response"
 	"net/http"
 )
 
 func RegisterV1ImageRoutes(mux *http.ServeMux) {
-	svc := NewService()
+	fileSvc := services.NewFileSystemService()
+	svc := NewService(fileSvc)
 	h := NewHandler(svc)
 
 	mux.HandleFunc("/image/upload", func(w http.ResponseWriter, r *http.Request) {

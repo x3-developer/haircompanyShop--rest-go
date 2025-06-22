@@ -21,8 +21,9 @@ func NewHandler(s Service) *Handler {
 }
 
 func (h *Handler) Upload(w http.ResponseWriter, r *http.Request) {
-	r.Body = http.MaxBytesReader(w, r.Body, 50<<20)
-	if err := r.ParseMultipartForm(50 << 20); err != nil {
+	bodyLimit := int64(50 << 20) // Limit request body to 50 MB
+	r.Body = http.MaxBytesReader(w, r.Body, bodyLimit)
+	if err := r.ParseMultipartForm(bodyLimit); err != nil {
 		if strings.Contains(err.Error(), "http: request body too large") {
 			response.SendError(w, http.StatusRequestEntityTooLarge, "file too large", response.RequestTooLarge)
 			return
@@ -76,7 +77,7 @@ func (h *Handler) Upload(w http.ResponseWriter, r *http.Request) {
 				}
 			}(file)
 
-			imageDTO, err := h.svc.UploadImageToTemp(file, fileHeader.Filename)
+			imageDTO, err := h.svc.UploadImage(file, fileHeader.Filename)
 			if err != nil {
 				msg := fmt.Sprintf("failed to upload image: %v", err)
 				response.SendError(w, http.StatusInternalServerError, msg, response.ServerError)
