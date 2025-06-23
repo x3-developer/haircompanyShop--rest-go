@@ -1,18 +1,18 @@
 package dto
 
 type UpdateDTO struct {
-	Name            string `json:"name" validate:"min=3,max=255"`
-	Description     string `json:"description"`
-	Image           string `json:"image"`
-	HeaderImage     string `json:"headerImage"`
-	Slug            string `json:"slug" validate:"min=3,max=255"`
-	ParentID        *uint  `json:"parentId"`
-	SortIndex       int    `json:"sortIndex" validate:"gte=0"`
-	SeoTitle        string `json:"seoTitle"`
-	SeoDescription  string `json:"seoDescription"`
-	SeoKeys         string `json:"seoKeys"`
-	IsActive        bool   `json:"isActive"`
-	IsShade         bool   `json:"isShade"`
-	IsVisibleInMenu bool   `json:"isVisibleInMenu"`
-	IsVisibleOnMain bool   `json:"isVisibleOnMain"`
+	Name            *string `json:"name" validate:"omitempty,min=3,max=255"`
+	Description     *string `json:"description" validate:"omitempty"`
+	Image           *string `json:"image" validate:"omitempty"`
+	HeaderImage     *string `json:"headerImage" validate:"omitempty"`
+	Slug            *string `json:"slug" validate:"omitempty,min=3,max=255"`
+	ParentID        *uint   `json:"parentId" validate:"omitempty"`
+	SortIndex       *int    `json:"sortIndex" validate:"omitempty,gte=0"`
+	SeoTitle        *string `json:"seoTitle" validate:"omitempty"`
+	SeoDescription  *string `json:"seoDescription" validate:"omitempty"`
+	SeoKeys         *string `json:"seoKeys" validate:"omitempty"`
+	IsActive        *bool   `json:"isActive" validate:"omitempty"`
+	IsShade         *bool   `json:"isShade" validate:"omitempty"`
+	IsVisibleInMenu *bool   `json:"isVisibleInMenu" validate:"omitempty"`
+	IsVisibleOnMain *bool   `json:"isVisibleOnMain" validate:"omitempty"`
 }

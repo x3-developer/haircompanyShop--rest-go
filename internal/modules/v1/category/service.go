@@ -2,6 +2,7 @@ package category
 
 import (
 	"context"
+	"errors"
 	"haircompany-shop-rest/internal/modules/v1/category/dto"
 	"haircompany-shop-rest/internal/services"
 	"haircompany-shop-rest/pkg/response"
@@ -14,8 +15,8 @@ type Service interface {
 	Create(createDto dto.CreateDTO) (*dto.ResponseDTO, []response.ErrorField, error)
 	GetAll() ([]*dto.ResponseDTO, error)
 	GetById(id uint) (*dto.ResponseDTO, error)
-	Update() (*Category, error)
-	Delete(id int) error
+	Update(id uint, updateDto dto.UpdateDTO) (*dto.ResponseDTO, []response.ErrorField, error)
+	Delete(id uint) error
 }
 
 type service struct {
@@ -108,10 +109,65 @@ func (c *service) GetById(id uint) (*dto.ResponseDTO, error) {
 	return categoryDTO, err
 }
 
-func (c *service) Update() (*Category, error) {
-	return c.repo.Update()
+func (c *service) Update(id uint, updateDto dto.UpdateDTO) (*dto.ResponseDTO, []response.ErrorField, error) {
+	model, err := c.repo.GetById(id)
+	if err != nil {
+		return nil, nil, err
+
+	}
+	if model == nil {
+		return nil, nil, errors.New("category not found")
+	}
+
+	TransformUpdateDTOToModel(updateDto, model)
+	existingCategory, err := c.repo.GetByUniqueFields(model.Name, model.Slug)
+	if err != nil {
+		return nil, nil, err
+	}
+	if existingCategory != nil && existingCategory.ID != id {
+		var validationErrors []response.ErrorField
+		if existingCategory.Name == model.Name {
+			validationErrors = append(validationErrors, response.NewErrorField("name", string(response.NotUnique)))
+		}
+		if existingCategory.Slug == model.Slug {
+			validationErrors = append(validationErrors, response.NewErrorField("slug", string(response.NotUnique)))
+		}
+		return nil, validationErrors, nil
+	}
+
+	updatedCategory, err := c.repo.Update(model)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var filenames []string
+
+	if updateDto.Image != nil {
+		filenames = append(filenames, *updateDto.Image)
+	}
+	if updateDto.HeaderImage != nil {
+		filenames = append(filenames, *updateDto.HeaderImage)
+	}
+
+	if len(filenames) != 0 {
+		utils.SafeGo(c.ctx, c.wg, "MoveImageToPermanent", func(ctx context.Context) {
+			if ctx.Err() != nil {
+				log.Println("context cancelled, skipping image move")
+				return
+			}
+
+			if err := c.fileService.MoveToPermanent(filenames, "images/category"); err != nil {
+				log.Printf("error moving images to permanent storage: %v", err)
+			}
+		})
+	}
+
+	updatedCategoryResponse := TransformModelToResponseDTO(updatedCategory)
+
+	return updatedCategoryResponse, nil, nil
+
 }
 
-func (c *service) Delete(id int) error {
+func (c *service) Delete(id uint) error {
 	return c.repo.Delete(id)
 }

@@ -91,6 +91,48 @@ func (h *Handler) GetById(w http.ResponseWriter, r *http.Request) {
 	response.SendSuccess(w, http.StatusOK, category)
 }
 
-func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {}
+func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
+	idStr := r.PathValue("id")
+	if idStr == "" {
+		msg := "missing category id"
+		response.SendError(w, http.StatusBadRequest, msg, response.BadRequest)
+		return
+	}
+
+	id, err := strconv.Atoi(idStr)
+	if err != nil || id < 0 {
+		msg := fmt.Sprintf("invalid category id: %s", idStr)
+		response.SendError(w, http.StatusBadRequest, msg, response.BadRequest)
+		return
+	}
+
+	updateDto, err := request.DecodeBody[dto.UpdateDTO](r.Body)
+	if err != nil {
+		msg := fmt.Sprintf("invalid request body: %v", err)
+		response.SendError(w, http.StatusBadRequest, msg, response.BadRequest)
+		return
+	}
+
+	errFields := constraint.ValidateDTO(updateDto)
+	if errFields != nil {
+		msg := "validation errors occurred"
+		response.SendValidationError(w, http.StatusBadRequest, msg, response.BadRequest, errFields)
+		return
+	}
+
+	updatedCategory, errFields, err := h.svc.Update(uint(id), updateDto)
+	if err != nil {
+		msg := fmt.Sprintf("failed to update category: %v", err)
+		response.SendError(w, http.StatusInternalServerError, msg, response.ServerError)
+		return
+	}
+	if errFields != nil {
+		msg := "validation errors occurred"
+		response.SendValidationError(w, http.StatusBadRequest, msg, response.BadRequest, errFields)
+		return
+	}
+
+	response.SendSuccess(w, http.StatusOK, updatedCategory)
+}
 
 func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {}

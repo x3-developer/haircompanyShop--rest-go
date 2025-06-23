@@ -10,8 +10,8 @@ type Repository interface {
 	Create(model *Category) (*Category, error)
 	GetAll() ([]*Category, error)
 	GetById(id uint) (*Category, error)
-	Update() (*Category, error)
-	Delete(id int) error
+	Update(model *Category) (*Category, error)
+	Delete(id uint) error
 	GetByUniqueFields(name, slug string) (*Category, error)
 }
 
@@ -61,11 +61,16 @@ func (r *repository) GetById(id uint) (*Category, error) {
 	return category, err
 }
 
-func (r *repository) Update() (*Category, error) {
-	return nil, nil
+func (r *repository) Update(model *Category) (*Category, error) {
+	result := r.DB.Save(&model)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return model, nil
 }
 
-func (r *repository) Delete(id int) error {
+func (r *repository) Delete(id uint) error {
 	return nil
 }
 
@@ -73,7 +78,7 @@ func (r *repository) GetByUniqueFields(name, slug string) (*Category, error) {
 	var category *Category
 	var err error
 
-	result := r.DB.First(&category, "name = ? AND slug = ?", name, slug)
+	result := r.DB.First(&category, "name = ? OR slug = ?", name, slug)
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 			return nil, nil
