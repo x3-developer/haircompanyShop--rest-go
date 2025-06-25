@@ -167,5 +167,5 @@ func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response.SendSuccess(w, http.StatusNoContent, nil)
+	response.SendSuccess(w, http.StatusOK, category)
 }
