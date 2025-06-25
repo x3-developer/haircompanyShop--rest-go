@@ -1,9 +1,11 @@
-package category
+package dto
 
-import "haircompany-shop-rest/internal/modules/v1/category/dto"
+import (
+	categoryModel "haircompany-shop-rest/internal/modules/v1/category/model"
+)
 
-func TransformCreateDTOToModel(dto dto.CreateDTO) *Category {
-	return &Category{
+func TransformCreateDTOToModel(dto CreateDTO) *categoryModel.Category {
+	return &categoryModel.Category{
 		Name:            dto.Name,
 		Description:     dto.Description,
 		Image:           dto.Image,
@@ -21,7 +23,7 @@ func TransformCreateDTOToModel(dto dto.CreateDTO) *Category {
 	}
 }
 
-func TransformUpdateDTOToModel(dto dto.UpdateDTO, model *Category) *Category {
+func TransformUpdateDTOToModel(dto UpdateDTO, model *categoryModel.Category) *categoryModel.Category {
 	if dto.Name != nil && *dto.Name != "" {
 		model.Name = *dto.Name
 	}
@@ -68,8 +70,8 @@ func TransformUpdateDTOToModel(dto dto.UpdateDTO, model *Category) *Category {
 	return model
 }
 
-func TransformModelToResponseDTO(model *Category) *dto.ResponseDTO {
-	return &dto.ResponseDTO{
+func TransformModelToResponseDTO(model *categoryModel.Category) *ResponseDTO {
+	return &ResponseDTO{
 		Id:              model.ID,
 		CreatedAt:       model.CreatedAt,
 		UpdatedAt:       model.UpdatedAt,

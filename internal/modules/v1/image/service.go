@@ -29,7 +29,7 @@ func (s *service) UploadImage(file multipart.File, filename string) (*dto.Respon
 		return nil, err
 	}
 
-	imageDTO = TransformImageToResponseDTO(newFilename)
+	imageDTO = dto.TransformImageToResponseDTO(newFilename)
 
 	return imageDTO, nil
 }

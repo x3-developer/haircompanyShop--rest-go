@@ -135,4 +135,37 @@ func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
 	response.SendSuccess(w, http.StatusOK, updatedCategory)
 }
 
-func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {}
+func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
+	idStr := r.PathValue("id")
+	if idStr == "" {
+		msg := "missing category id"
+		response.SendError(w, http.StatusBadRequest, msg, response.BadRequest)
+		return
+	}
+
+	id, err := strconv.Atoi(idStr)
+	if err != nil || id < 0 {
+		msg := fmt.Sprintf("invalid category id: %s", idStr)
+		response.SendError(w, http.StatusBadRequest, msg, response.BadRequest)
+		return
+	}
+
+	category, linkedEntitiesCount, err := h.svc.Delete(uint(id))
+	if category == nil {
+		msg := fmt.Sprintf("category with id %d not found", id)
+		response.SendError(w, http.StatusNotFound, msg, response.NotFound)
+		return
+	}
+	if linkedEntitiesCount > 0 {
+		msg := fmt.Sprintf("category with id %d cannot be deleted because it has %d linked entities", id, linkedEntitiesCount)
+		response.SendError(w, http.StatusConflict, msg, response.HasLinkedEntities)
+		return
+	}
+	if err != nil {
+		msg := fmt.Sprintf("failed to delete category: %v", err)
+		response.SendError(w, http.StatusInternalServerError, msg, response.ServerError)
+		return
+	}
+
+	response.SendSuccess(w, http.StatusNoContent, nil)
+}

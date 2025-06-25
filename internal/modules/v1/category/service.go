@@ -16,7 +16,7 @@ type Service interface {
 	GetAll() ([]*dto.ResponseDTO, error)
 	GetById(id uint) (*dto.ResponseDTO, error)
 	Update(id uint, updateDto dto.UpdateDTO) (*dto.ResponseDTO, []response.ErrorField, error)
-	Delete(id uint) error
+	Delete(id uint) (*dto.ResponseDTO, int64, error)
 }
 
 type service struct {
@@ -60,7 +60,7 @@ func (c *service) Create(createDto dto.CreateDTO) (*dto.ResponseDTO, []response.
 		}
 	}
 
-	categoryModel := TransformCreateDTOToModel(createDto)
+	categoryModel := dto.TransformCreateDTOToModel(createDto)
 	createdCategory, err := c.repo.Create(categoryModel)
 	if err != nil {
 		return nil, nil, err
@@ -78,7 +78,7 @@ func (c *service) Create(createDto dto.CreateDTO) (*dto.ResponseDTO, []response.
 		}
 	})
 
-	createdCategoryResponse := TransformModelToResponseDTO(createdCategory)
+	createdCategoryResponse := dto.TransformModelToResponseDTO(createdCategory)
 
 	return createdCategoryResponse, nil, nil
 }
@@ -91,7 +91,7 @@ func (c *service) GetAll() ([]*dto.ResponseDTO, error) {
 	}
 
 	for _, model := range models {
-		categoryResponse := TransformModelToResponseDTO(model)
+		categoryResponse := dto.TransformModelToResponseDTO(model)
 		categoryDTOs = append(categoryDTOs, categoryResponse)
 	}
 
@@ -104,12 +104,13 @@ func (c *service) GetById(id uint) (*dto.ResponseDTO, error) {
 		return nil, err
 	}
 
-	categoryDTO := TransformModelToResponseDTO(model)
+	categoryDTO := dto.TransformModelToResponseDTO(model)
 
 	return categoryDTO, err
 }
 
 func (c *service) Update(id uint, updateDto dto.UpdateDTO) (*dto.ResponseDTO, []response.ErrorField, error) {
+	var validationErrors []response.ErrorField
 	model, err := c.repo.GetById(id)
 	if err != nil {
 		return nil, nil, err
@@ -119,13 +120,12 @@ func (c *service) Update(id uint, updateDto dto.UpdateDTO) (*dto.ResponseDTO, []
 		return nil, nil, errors.New("category not found")
 	}
 
-	TransformUpdateDTOToModel(updateDto, model)
+	dto.TransformUpdateDTOToModel(updateDto, model)
 	existingCategory, err := c.repo.GetByUniqueFields(model.Name, model.Slug)
 	if err != nil {
 		return nil, nil, err
 	}
 	if existingCategory != nil && existingCategory.ID != id {
-		var validationErrors []response.ErrorField
 		if existingCategory.Name == model.Name {
 			validationErrors = append(validationErrors, response.NewErrorField("name", string(response.NotUnique)))
 		}
@@ -133,6 +133,14 @@ func (c *service) Update(id uint, updateDto dto.UpdateDTO) (*dto.ResponseDTO, []
 			validationErrors = append(validationErrors, response.NewErrorField("slug", string(response.NotUnique)))
 		}
 		return nil, validationErrors, nil
+	}
+
+	if updateDto.ParentID != nil {
+		existingParent, err := c.repo.GetById(*updateDto.ParentID)
+		if err != nil || existingParent == nil {
+			validationErrors = append(validationErrors, response.NewErrorField("parentId", string(response.NotFound)))
+			return nil, validationErrors, nil
+		}
 	}
 
 	updatedCategory, err := c.repo.Update(model)
@@ -162,12 +170,45 @@ func (c *service) Update(id uint, updateDto dto.UpdateDTO) (*dto.ResponseDTO, []
 		})
 	}
 
-	updatedCategoryResponse := TransformModelToResponseDTO(updatedCategory)
+	updatedCategoryResponse := dto.TransformModelToResponseDTO(updatedCategory)
 
 	return updatedCategoryResponse, nil, nil
 
 }
 
-func (c *service) Delete(id uint) error {
-	return c.repo.Delete(id)
+func (c *service) Delete(id uint) (*dto.ResponseDTO, int64, error) {
+	var linkedEntitiesCount int64
+	existedCategory, err := c.repo.GetById(id)
+	if existedCategory == nil {
+		return nil, linkedEntitiesCount, err
+	}
+
+	categoryDTO := dto.TransformModelToResponseDTO(existedCategory)
+	linkedEntitiesCount, err = c.repo.CountChildrenByParentId(id)
+	if err != nil {
+		return categoryDTO, linkedEntitiesCount, err
+	}
+	if linkedEntitiesCount > 0 {
+		return categoryDTO, linkedEntitiesCount, errors.New("category has children and cannot be deleted")
+	}
+	// TODO здесь нужно проверить на наличие товаров в категории
+
+	err = c.repo.Delete(id)
+	if err != nil {
+		return categoryDTO, linkedEntitiesCount, err
+	}
+
+	filenames := []string{existedCategory.Image, existedCategory.HeaderImage}
+	utils.SafeGo(c.ctx, c.wg, "DeleteImage", func(ctx context.Context) {
+		if ctx.Err() != nil {
+			log.Println("context cancelled, skipping image deletion")
+			return
+		}
+
+		if err := c.fileService.Delete(filenames, "images/category"); err != nil {
+			log.Printf("error deleting images: %v", err)
+		}
+	})
+
+	return categoryDTO, linkedEntitiesCount, nil
 }

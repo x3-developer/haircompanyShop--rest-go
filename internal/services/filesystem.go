@@ -18,6 +18,7 @@ type FileSystemService interface {
 	SaveToTemp(file multipart.File, filename string) (string, error)
 	CleanTemp()
 	MoveToPermanent(filenames []string, folder string) error
+	Delete(filenames []string, folder string) error
 	getPermanentPath(folder string) string
 	getNewFileName(filename string) (string, error)
 }
@@ -92,6 +93,20 @@ func (s *fileSystemService) MoveToPermanent(filenames []string, folder string) e
 		if err := os.Rename(tempFilePath, permanentFilePath); err != nil {
 			log.Printf("failed to move file from %s to %s: %v", tempFilePath, permanentFilePath, err)
 			continue
+		}
+	}
+
+	return nil
+}
+
+func (s *fileSystemService) Delete(filename []string, folder string) error {
+	permanentDir := s.getPermanentPath(folder)
+
+	for _, file := range filename {
+		filePath := filepath.Join(permanentDir, file)
+		if err := os.Remove(filePath); err != nil {
+			log.Printf("failed to delete file %s: %v", filePath, err)
+			return err
 		}
 	}
 

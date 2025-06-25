@@ -54,4 +54,14 @@ func RegisterV1CategoryRoutes(mux *http.ServeMux, db *database.DB, ctx context.C
 			response.SendError(w, http.StatusMethodNotAllowed, msg, response.MethodNotAllowed)
 		}
 	})
+
+	mux.HandleFunc("/category/{id}/delete", func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case http.MethodDelete:
+			h.Delete(w, r)
+		default:
+			msg := "Method not allowed. Allowed methods: PATCH"
+			response.SendError(w, http.StatusMethodNotAllowed, msg, response.MethodNotAllowed)
+		}
+	})
 }
