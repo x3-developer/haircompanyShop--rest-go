@@ -1,0 +1,431 @@
+definitions:
+  docsResponse.Category201:
+    properties:
+      data:
+        $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_category_dto.ResponseDTO'
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.Category500:
+    properties:
+      errorCode:
+        enum:
+        - SERVER_ERROR
+        type: string
+      isSuccess:
+        example: false
+        type: boolean
+      message:
+        type: string
+    type: object
+  docsResponse.CategoryCreate400:
+    properties:
+      errorCode:
+        enum:
+        - BAD_REQUEST
+        type: string
+      fields:
+        items:
+          $ref: '#/definitions/docsResponse.createField'
+        type: array
+      isSuccess:
+        example: false
+        type: boolean
+      message:
+        type: string
+    type: object
+  docsResponse.CategoryDelete200:
+    properties:
+      data:
+        $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_category_dto.ResponseDTO'
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.CategoryDelete400:
+    properties:
+      errorCode:
+        enum:
+        - BAD_REQUEST
+        type: string
+      isSuccess:
+        example: false
+        type: boolean
+      message:
+        type: string
+    type: object
+  docsResponse.CategoryDelete404:
+    properties:
+      errorCode:
+        enum:
+        - NOT_FOUND
+        type: string
+      isSuccess:
+        example: false
+        type: boolean
+      message:
+        type: string
+    type: object
+  docsResponse.CategoryDelete409:
+    properties:
+      errorCode:
+        enum:
+        - HAS_LINKED_ENTITIES
+        type: string
+      isSuccess:
+        example: false
+        type: boolean
+      message:
+        type: string
+    type: object
+  docsResponse.CategoryGetById200:
+    properties:
+      data:
+        $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_category_dto.ResponseDTO'
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.CategoryGetById400:
+    properties:
+      errorCode:
+        enum:
+        - BAD_REQUEST
+        type: string
+      isSuccess:
+        example: false
+        type: boolean
+      message:
+        type: string
+    type: object
+  docsResponse.CategoryGetById404:
+    properties:
+      errorCode:
+        enum:
+        - NOT_FOUND
+        type: string
+      isSuccess:
+        example: false
+        type: boolean
+      message:
+        type: string
+    type: object
+  docsResponse.CategoryList200:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_category_dto.ResponseDTO'
+        type: array
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.CategoryUpdate200:
+    properties:
+      data:
+        $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_category_dto.ResponseDTO'
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.CategoryUpdate400:
+    properties:
+      errorCode:
+        enum:
+        - BAD_REQUEST
+        type: string
+      fields:
+        items:
+          $ref: '#/definitions/docsResponse.createField'
+        type: array
+      isSuccess:
+        example: false
+        type: boolean
+      message:
+        type: string
+    type: object
+  docsResponse.createField:
+    properties:
+      errorCode:
+        enum:
+        - NOT_UNIQUE
+        - NOT_FOUND
+        type: string
+      field:
+        enum:
+        - name
+        - slug
+        - parentId
+        type: string
+    type: object
+  haircompany-shop-rest_internal_modules_v1_category_dto.CreateDTO:
+    properties:
+      description:
+        type: string
+      headerImage:
+        maxLength: 255
+        type: string
+      image:
+        maxLength: 255
+        type: string
+      isActive:
+        type: boolean
+      isShade:
+        type: boolean
+      isVisibleInMenu:
+        type: boolean
+      isVisibleOnMain:
+        type: boolean
+      name:
+        maxLength: 255
+        minLength: 3
+        type: string
+      parentId:
+        description: Nullable, can be zero
+        minimum: 0
+        type: integer
+      seoDescription:
+        type: string
+      seoKeys:
+        type: string
+      seoTitle:
+        maxLength: 255
+        type: string
+      slug:
+        maxLength: 255
+        minLength: 3
+        type: string
+      sortIndex:
+        maximum: 9999
+        minimum: 0
+        type: integer
+    required:
+    - headerImage
+    - image
+    - name
+    - slug
+    - sortIndex
+    type: object
+  haircompany-shop-rest_internal_modules_v1_category_dto.ResponseDTO:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      headerImage:
+        type: string
+      id:
+        type: integer
+      image:
+        type: string
+      isActive:
+        type: boolean
+      isShade:
+        type: boolean
+      isVisibleInMenu:
+        type: boolean
+      isVisibleOnMain:
+        type: boolean
+      name:
+        type: string
+      parentId:
+        type: integer
+      seoDescription:
+        type: string
+      seoKeys:
+        type: string
+      seoTitle:
+        type: string
+      slug:
+        type: string
+      sortIndex:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  haircompany-shop-rest_internal_modules_v1_category_dto.UpdateDTO:
+    properties:
+      description:
+        type: string
+      headerImage:
+        type: string
+      image:
+        type: string
+      isActive:
+        type: boolean
+      isShade:
+        type: boolean
+      isVisibleInMenu:
+        type: boolean
+      isVisibleOnMain:
+        type: boolean
+      name:
+        maxLength: 255
+        minLength: 3
+        type: string
+      parentId:
+        type: integer
+      seoDescription:
+        type: string
+      seoKeys:
+        type: string
+      seoTitle:
+        type: string
+      slug:
+        maxLength: 255
+        minLength: 3
+        type: string
+      sortIndex:
+        minimum: 0
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /api/v1/category:
+    get:
+      description: Retrieve all categories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of categories
+          schema:
+            $ref: '#/definitions/docsResponse.CategoryList200'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/docsResponse.Category500'
+      summary: Get all categories
+      tags:
+      - Category
+    post:
+      consumes:
+      - application/json
+      description: Create a new category
+      parameters:
+      - description: Category to create
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_category_dto.CreateDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Category created successfully
+          schema:
+            $ref: '#/definitions/docsResponse.Category201'
+        "400":
+          description: Bad Request or Validation Error
+          schema:
+            $ref: '#/definitions/docsResponse.CategoryCreate400'
+        "500":
+          description: Server Error
+          schema:
+            $ref: '#/definitions/docsResponse.Category500'
+      summary: Create a new category
+      tags:
+      - Category
+  /api/v1/category/{id}:
+    delete:
+      description: Delete category by ID
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Category deleted
+          schema:
+            $ref: '#/definitions/docsResponse.CategoryDelete200'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/docsResponse.CategoryDelete400'
+        "404":
+          description: Category not found
+          schema:
+            $ref: '#/definitions/docsResponse.CategoryDelete404'
+        "409":
+          description: Category has linked entities
+          schema:
+            $ref: '#/definitions/docsResponse.CategoryDelete409'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/docsResponse.Category500'
+      summary: Delete category
+      tags:
+      - Category
+    get:
+      description: Retrieve category by its ID
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Category found
+          schema:
+            $ref: '#/definitions/docsResponse.CategoryGetById200'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/docsResponse.CategoryGetById400'
+        "404":
+          description: Category not found
+          schema:
+            $ref: '#/definitions/docsResponse.CategoryGetById404'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/docsResponse.Category500'
+      summary: Get category by ID
+      tags:
+      - Category
+    put:
+      consumes:
+      - application/json
+      description: Update category by ID
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Category update payload
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_category_dto.UpdateDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Category updated
+          schema:
+            $ref: '#/definitions/docsResponse.CategoryUpdate200'
+        "400":
+          description: Bad request or validation error
+          schema:
+            $ref: '#/definitions/docsResponse.CategoryUpdate400'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/docsResponse.Category500'
+      summary: Update category
+      tags:
+      - Category
+swagger: "2.0"

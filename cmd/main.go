@@ -26,7 +26,7 @@ func main() {
 	cfg := config.LoadConfig()
 	db := database.NewDB(cfg)
 
-	srv := newHTTPServer(cfg.AppPort, db, ctx, &wg)
+	srv := newHTTPServer(cfg.AppEnv, cfg.AppPort, db, ctx, &wg)
 	runServer(srv)
 
 	scheduler := services.NewScheduler(ctx, &wg)
@@ -44,8 +44,8 @@ func loadEnv() {
 	}
 }
 
-func newHTTPServer(port string, db *database.DB, ctx context.Context, wg *sync.WaitGroup) *http.Server {
-	r := router.NewRouter(db, ctx, wg)
+func newHTTPServer(appEnv, port string, db *database.DB, ctx context.Context, wg *sync.WaitGroup) *http.Server {
+	r := router.NewRouter(appEnv, db, ctx, wg)
 	r = middleware.ChainMiddleware(r, middleware.LoggingMiddleware, middleware.RecoverMiddleware)
 
 	return &http.Server{

@@ -6,6 +6,7 @@ import (
 )
 
 type Config struct {
+	AppEnv     string
 	AppPort    string
 	DbHost     string
 	DbPort     string
@@ -16,6 +17,11 @@ type Config struct {
 }
 
 func LoadConfig() *Config {
+	appEnv := os.Getenv("APP_ENV")
+	if appEnv == "" {
+		log.Fatal("APP_ENV environment isn't set")
+	}
+
 	appPort := os.Getenv("APP_PORT")
 	if appPort == "" {
 		log.Fatal("APP_PORT environment isn't set")
@@ -52,6 +58,7 @@ func LoadConfig() *Config {
 	}
 
 	return &Config{
+		AppEnv:     appEnv,
 		AppPort:    appPort,
 		DbHost:     dbHost,
 		DbPort:     dbPort,
