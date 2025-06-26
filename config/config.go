@@ -14,6 +14,7 @@ type Config struct {
 	DbUser     string
 	DbPassword string
 	DbSsl      string
+	CORS       string
 }
 
 func LoadConfig() *Config {
@@ -57,6 +58,11 @@ func LoadConfig() *Config {
 		dbSsl = "verify-full"
 	}
 
+	corsAllowedOrigins := os.Getenv("CORS_ALLOWED_ORIGINS")
+	if corsAllowedOrigins == "" {
+		log.Fatal("CORS_ALLOWED_ORIGINS environment isn't set")
+	}
+
 	return &Config{
 		AppEnv:     appEnv,
 		AppPort:    appPort,
@@ -66,5 +72,6 @@ func LoadConfig() *Config {
 		DbUser:     dbUser,
 		DbPassword: dbPassword,
 		DbSsl:      dbSsl,
+		CORS:       corsAllowedOrigins,
 	}
 }
