@@ -15,6 +15,7 @@ type Config struct {
 	DbPassword string
 	DbSsl      string
 	CORS       string
+	AuthAppKey string
 }
 
 func LoadConfig() *Config {
@@ -63,6 +64,11 @@ func LoadConfig() *Config {
 		log.Fatal("CORS_ALLOWED_ORIGINS environment isn't set")
 	}
 
+	authAppKey := os.Getenv("AUTH_APP_KEY")
+	if authAppKey == "" {
+		log.Fatal("AUTH_APP_KEY environment isn't set")
+	}
+
 	return &Config{
 		AppEnv:     appEnv,
 		AppPort:    appPort,
@@ -73,5 +79,6 @@ func LoadConfig() *Config {
 		DbPassword: dbPassword,
 		DbSsl:      dbSsl,
 		CORS:       corsAllowedOrigins,
+		AuthAppKey: authAppKey,
 	}
 }

@@ -15,6 +15,7 @@ const (
 	MinLength         ErrorCode = "MIN_LENGTH"
 	MaxLength         ErrorCode = "MAX_LENGTH"
 	HasLinkedEntities ErrorCode = "HAS_LINKED_ENTITIES"
+	Forbidden         ErrorCode = "FORBIDDEN"
 )
 
 func GetErrorCodeByTag(tag string) ErrorCode {
