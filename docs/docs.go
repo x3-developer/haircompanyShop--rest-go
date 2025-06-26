@@ -233,6 +233,66 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/v1/image/upload": {
+            "post": {
+                "description": "Upload one or more images with a specific imageType",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Image"
+                ],
+                "summary": "Upload images",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Type of image (e.g. category)",
+                        "name": "imageType",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Image files to upload (multiple allowed)",
+                        "name": "images",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Uploaded images info",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/docsResponse.ImageUpload200"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request or Validation Error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.ImageUpload400"
+                        }
+                    },
+                    "413": {
+                        "description": "File too large",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.ImageUpload413"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.ImageUpload500"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -455,6 +515,81 @@ const docTemplate = `{
                 }
             }
         },
+        "docsResponse.ImageUpload200": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_image_dto.ResponseDTO"
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "docsResponse.ImageUpload400": {
+            "type": "object",
+            "properties": {
+                "errorCode": {
+                    "type": "string",
+                    "enum": [
+                        "BAD_REQUEST"
+                    ]
+                },
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/docsResponse.imageField"
+                    }
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "message": {
+                    "type": "string",
+                    "example": "validation errors occurred"
+                }
+            }
+        },
+        "docsResponse.ImageUpload413": {
+            "type": "object",
+            "properties": {
+                "errorCode": {
+                    "type": "string",
+                    "enum": [
+                        "REQUEST_TOO_LARGE"
+                    ]
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "message": {
+                    "type": "string",
+                    "example": "file too large"
+                }
+            }
+        },
+        "docsResponse.ImageUpload500": {
+            "type": "object",
+            "properties": {
+                "errorCode": {
+                    "type": "string",
+                    "enum": [
+                        "SERVER_ERROR"
+                    ]
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "message": {
+                    "type": "string",
+                    "example": "failed to upload image"
+                }
+            }
+        },
         "docsResponse.createField": {
             "type": "object",
             "properties": {
@@ -472,6 +607,19 @@ const docTemplate = `{
                         "slug",
                         "parentId"
                     ]
+                }
+            }
+        },
+        "docsResponse.imageField": {
+            "type": "object",
+            "properties": {
+                "errorCode": {
+                    "type": "string",
+                    "example": "INVALID_FORMAT"
+                },
+                "field": {
+                    "type": "string",
+                    "example": "images"
                 }
             }
         },
@@ -645,6 +793,14 @@ const docTemplate = `{
                 "sortIndex": {
                     "type": "integer",
                     "minimum": 0
+                }
+            }
+        },
+        "haircompany-shop-rest_internal_modules_v1_image_dto.ResponseDTO": {
+            "type": "object",
+            "properties": {
+                "image": {
+                    "type": "string"
                 }
             }
         }

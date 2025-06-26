@@ -145,6 +145,57 @@ definitions:
       message:
         type: string
     type: object
+  docsResponse.ImageUpload200:
+    properties:
+      data:
+        $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_image_dto.ResponseDTO'
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.ImageUpload400:
+    properties:
+      errorCode:
+        enum:
+        - BAD_REQUEST
+        type: string
+      fields:
+        items:
+          $ref: '#/definitions/docsResponse.imageField'
+        type: array
+      isSuccess:
+        example: false
+        type: boolean
+      message:
+        example: validation errors occurred
+        type: string
+    type: object
+  docsResponse.ImageUpload413:
+    properties:
+      errorCode:
+        enum:
+        - REQUEST_TOO_LARGE
+        type: string
+      isSuccess:
+        example: false
+        type: boolean
+      message:
+        example: file too large
+        type: string
+    type: object
+  docsResponse.ImageUpload500:
+    properties:
+      errorCode:
+        enum:
+        - SERVER_ERROR
+        type: string
+      isSuccess:
+        example: false
+        type: boolean
+      message:
+        example: failed to upload image
+        type: string
+    type: object
   docsResponse.createField:
     properties:
       errorCode:
@@ -157,6 +208,15 @@ definitions:
         - name
         - slug
         - parentId
+        type: string
+    type: object
+  docsResponse.imageField:
+    properties:
+      errorCode:
+        example: INVALID_FORMAT
+        type: string
+      field:
+        example: images
         type: string
     type: object
   haircompany-shop-rest_internal_modules_v1_category_dto.CreateDTO:
@@ -279,6 +339,11 @@ definitions:
       sortIndex:
         minimum: 0
         type: integer
+    type: object
+  haircompany-shop-rest_internal_modules_v1_image_dto.ResponseDTO:
+    properties:
+      image:
+        type: string
     type: object
 info:
   contact: {}
@@ -428,4 +493,44 @@ paths:
       summary: Update category
       tags:
       - Category
+  /api/v1/image/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload one or more images with a specific imageType
+      parameters:
+      - description: Type of image (e.g. category)
+        in: formData
+        name: imageType
+        required: true
+        type: string
+      - description: Image files to upload (multiple allowed)
+        in: formData
+        name: images
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Uploaded images info
+          schema:
+            items:
+              $ref: '#/definitions/docsResponse.ImageUpload200'
+            type: array
+        "400":
+          description: Bad Request or Validation Error
+          schema:
+            $ref: '#/definitions/docsResponse.ImageUpload400'
+        "413":
+          description: File too large
+          schema:
+            $ref: '#/definitions/docsResponse.ImageUpload413'
+        "500":
+          description: Server Error
+          schema:
+            $ref: '#/definitions/docsResponse.ImageUpload500'
+      summary: Upload images
+      tags:
+      - Image
 swagger: "2.0"

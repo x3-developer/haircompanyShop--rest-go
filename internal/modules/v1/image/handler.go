@@ -20,6 +20,19 @@ func NewHandler(s Service) *Handler {
 	}
 }
 
+// Upload images
+// @Summary      Upload images
+// @Description  Upload one or more images with a specific imageType
+// @Tags         Image
+// @Accept       multipart/form-data
+// @Produce      json
+// @Param        imageType   formData  string  true  			   "Type of image (e.g. category)"
+// @Param        images      formData  file    true  			   "Image files to upload (multiple allowed)"
+// @Success      200         {array}   docsResponse.ImageUpload200 "Uploaded images info"
+// @Failure      400         {object}  docsResponse.ImageUpload400 "Bad Request or Validation Error"
+// @Failure      413         {object}  docsResponse.ImageUpload413 "File too large"
+// @Failure      500         {object}  docsResponse.ImageUpload500 "Server Error"
+// @Router       /api/v1/image/upload [post]
 func (h *Handler) Upload(w http.ResponseWriter, r *http.Request) {
 	bodyLimit := int64(50 << 20) // Limit request body to 50 MB
 	r.Body = http.MaxBytesReader(w, r.Body, bodyLimit)
