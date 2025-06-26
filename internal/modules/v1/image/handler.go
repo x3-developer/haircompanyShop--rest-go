@@ -2,8 +2,8 @@ package image
 
 import (
 	"fmt"
+	"haircompany-shop-rest/internal/constraint"
 	"haircompany-shop-rest/internal/modules/v1/image/dto"
-	"haircompany-shop-rest/pkg/constraint"
 	"haircompany-shop-rest/pkg/response"
 	"mime/multipart"
 	"net/http"

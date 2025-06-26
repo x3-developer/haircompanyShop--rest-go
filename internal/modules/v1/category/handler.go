@@ -3,8 +3,8 @@ package category
 import (
 	"fmt"
 	_ "haircompany-shop-rest/docs/response"
+	"haircompany-shop-rest/internal/constraint"
 	"haircompany-shop-rest/internal/modules/v1/category/dto"
-	"haircompany-shop-rest/pkg/constraint"
 	"haircompany-shop-rest/pkg/request"
 	"haircompany-shop-rest/pkg/response"
 	"net/http"
