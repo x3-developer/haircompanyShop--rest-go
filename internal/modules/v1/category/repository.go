@@ -73,7 +73,7 @@ func (r *repository) Update(model *model.Category) (*model.Category, error) {
 }
 
 func (r *repository) Delete(id uint) error {
-	result := r.DB.Unscoped().Delete(&model.Category{}, id)
+	result := r.DB.Delete(&model.Category{}, id)
 	if result.Error != nil {
 		return result.Error
 	}

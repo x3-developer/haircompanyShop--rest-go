@@ -13,9 +13,7 @@ type DB struct {
 }
 
 func NewDB(cfg *config.Config) *DB {
-	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
-		cfg.DbHost, cfg.DbPort, cfg.DbUser, cfg.DbPassword, cfg.DbName, cfg.DbSsl,
-	)
+	dsn := GetDSN(cfg)
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
@@ -23,4 +21,10 @@ func NewDB(cfg *config.Config) *DB {
 	}
 
 	return &DB{db}
+}
+
+func GetDSN(cfg *config.Config) string {
+	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
+		cfg.DbHost, cfg.DbPort, cfg.DbUser, cfg.DbPassword, cfg.DbName, cfg.DbSsl,
+	)
 }

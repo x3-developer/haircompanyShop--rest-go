@@ -16,6 +16,7 @@ const (
 	MaxLength         ErrorCode = "MAX_LENGTH"
 	HasLinkedEntities ErrorCode = "HAS_LINKED_ENTITIES"
 	Forbidden         ErrorCode = "FORBIDDEN"
+	Unauthorized      ErrorCode = "UNAUTHORIZED"
 )
 
 func GetErrorCodeByTag(tag string) ErrorCode {
