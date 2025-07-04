@@ -34,14 +34,14 @@ type JWTService interface {
 }
 
 type jwtService struct {
-	dashboardSecret string
-	clientSecret    string
+	dashboardSecret []byte
+	clientSecret    []byte
 }
 
 func NewJWTService(dashboardSecret, clientSecret string) JWTService {
 	return &jwtService{
-		dashboardSecret: dashboardSecret,
-		clientSecret:    clientSecret,
+		dashboardSecret: []byte(dashboardSecret),
+		clientSecret:    []byte(clientSecret),
 	}
 }
 
@@ -76,7 +76,7 @@ func (s *jwtService) GenerateClientToken(phone string) (string, error) {
 
 func (s *jwtService) ValidateDashboardToken(tokenString string) (*DashboardClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &DashboardClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte(s.dashboardSecret), nil
+		return s.dashboardSecret, nil
 	})
 	if err != nil {
 		return nil, err
@@ -91,7 +91,7 @@ func (s *jwtService) ValidateDashboardToken(tokenString string) (*DashboardClaim
 
 func (s *jwtService) ValidateClientToken(tokenString string) (*ClientClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &ClientClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte(s.clientSecret), nil
+		return s.clientSecret, nil
 	})
 	if err != nil {
 		return nil, err

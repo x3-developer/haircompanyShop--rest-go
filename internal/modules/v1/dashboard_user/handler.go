@@ -1,0 +1,51 @@
+package dashboard_user
+
+import (
+	"fmt"
+	_ "haircompany-shop-rest/docs/response"
+	"haircompany-shop-rest/internal/constraint"
+	"haircompany-shop-rest/internal/modules/v1/dashboard_user/dto"
+	"haircompany-shop-rest/pkg/request"
+	"haircompany-shop-rest/pkg/response"
+	"net/http"
+)
+
+type Handler struct {
+	svc Service
+}
+
+func NewHandler(s Service) *Handler {
+	return &Handler{
+		svc: s,
+	}
+}
+
+func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
+	createDto, err := request.DecodeBody[dto.CreateDTO](r.Body)
+	if err != nil {
+		msg := fmt.Sprintf("invalid request body: %v", err)
+		response.SendError(w, http.StatusBadRequest, msg, response.BadRequest)
+		return
+	}
+
+	errFields := constraint.ValidateDTO(createDto)
+	if errFields != nil {
+		msg := "validation errors occurred"
+		response.SendValidationError(w, http.StatusBadRequest, msg, response.BadRequest, errFields)
+		return
+	}
+
+	createdUser, errFields, err := h.svc.Create(createDto)
+	if err != nil {
+		msg := fmt.Sprintf("failed to create user: %v", err)
+		response.SendError(w, http.StatusBadRequest, msg, response.ServerError)
+		return
+	}
+	if errFields != nil {
+		msg := "validation errors occurred"
+		response.SendValidationError(w, http.StatusBadRequest, msg, response.BadRequest, errFields)
+		return
+	}
+
+	response.SendSuccess(w, http.StatusCreated, createdUser)
+}
