@@ -46,7 +46,7 @@ func loadEnv() {
 
 func newHTTPServer(cfg *config.Config, container *container.Container) *http.Server {
 	r := router.NewRouter(cfg.AppEnv, container)
-	r = middleware.ChainMiddleware(r, middleware.LoggingMiddleware, middleware.RecoverMiddleware, middleware.CORSMiddleware(cfg.CORS), middleware.APIMiddleware(cfg.AuthAppKey))
+	r = middleware.ChainMiddleware(r, middleware.APIMiddleware(cfg.AuthAppKey), middleware.CORSMiddleware(cfg.CORS), middleware.RecoverMiddleware, middleware.LoggingMiddleware)
 
 	return &http.Server{
 		Addr:    ":" + cfg.AppPort,
