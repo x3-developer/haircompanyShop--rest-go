@@ -1,20 +1,17 @@
 package auth
 
 import (
+	"haircompany-shop-rest/internal/container"
 	"haircompany-shop-rest/internal/modules/v1/client_user"
 	"haircompany-shop-rest/internal/modules/v1/dashboard_user"
-	"haircompany-shop-rest/internal/services"
-	"haircompany-shop-rest/pkg/database"
 	"haircompany-shop-rest/pkg/response"
 	"net/http"
 )
 
-func RegisterV1AuthRoutes(mux *http.ServeMux, db *database.DB, dashboardSecret, clientSecret string) {
-	jwtSvc := services.NewJWTService(dashboardSecret, clientSecret)
-	passwordSvc := services.NewPasswordService()
-	dashboardUserRepo := dashboard_user.NewRepository(db)
-	clientUserRepo := client_user.NewRepository(db)
-	svc := NewService(jwtSvc, passwordSvc, dashboardUserRepo, clientUserRepo)
+func RegisterV1AuthRoutes(mux *http.ServeMux, container *container.Container) {
+	dashboardUserRepo := dashboard_user.NewRepository(container.DB)
+	clientUserRepo := client_user.NewRepository(container.DB)
+	svc := NewService(container.JWTService, container.PasswordService, dashboardUserRepo, clientUserRepo)
 	h := NewHandler(svc)
 
 	mux.HandleFunc("/auth/dashboard/login", func(w http.ResponseWriter, r *http.Request) {

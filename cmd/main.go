@@ -4,10 +4,10 @@ import (
 	"context"
 	"github.com/joho/godotenv"
 	"haircompany-shop-rest/config"
+	"haircompany-shop-rest/internal/container"
 	"haircompany-shop-rest/internal/middleware"
 	"haircompany-shop-rest/internal/router"
 	"haircompany-shop-rest/internal/services"
-	"haircompany-shop-rest/pkg/database"
 	"log"
 	"net/http"
 	"os/signal"
@@ -24,9 +24,9 @@ func main() {
 
 	loadEnv()
 	cfg := config.LoadConfig()
-	db := database.NewDB(cfg)
+	diContainer := container.NewContainer(cfg, ctx, &wg)
 
-	srv := newHTTPServer(cfg, db, ctx, &wg)
+	srv := newHTTPServer(cfg, diContainer)
 	runServer(srv)
 
 	scheduler := services.NewScheduler(ctx, &wg)
@@ -44,8 +44,8 @@ func loadEnv() {
 	}
 }
 
-func newHTTPServer(cfg *config.Config, db *database.DB, ctx context.Context, wg *sync.WaitGroup) *http.Server {
-	r := router.NewRouter(cfg, db, ctx, wg)
+func newHTTPServer(cfg *config.Config, container *container.Container) *http.Server {
+	r := router.NewRouter(cfg.AppEnv, container)
 	r = middleware.ChainMiddleware(r, middleware.LoggingMiddleware, middleware.RecoverMiddleware, middleware.CORSMiddleware(cfg.CORS), middleware.APIMiddleware(cfg.AuthAppKey))
 
 	return &http.Server{

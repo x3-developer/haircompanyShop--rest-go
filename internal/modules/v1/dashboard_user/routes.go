@@ -1,16 +1,14 @@
 package dashboard_user
 
 import (
-	"haircompany-shop-rest/internal/services"
-	"haircompany-shop-rest/pkg/database"
+	"haircompany-shop-rest/internal/container"
 	"haircompany-shop-rest/pkg/response"
 	"net/http"
 )
 
-func RegisterV1DashboardUserRoutes(mux *http.ServeMux, db *database.DB) {
-	repo := NewRepository(db)
-	passwordSvc := services.NewPasswordService()
-	svc := NewService(repo, passwordSvc)
+func RegisterV1DashboardUserRoutes(mux *http.ServeMux, container *container.Container) {
+	repo := NewRepository(container.DB)
+	svc := NewService(repo, container.PasswordService)
 	h := NewHandler(svc)
 
 	mux.HandleFunc("/dashboard-user/create", func(w http.ResponseWriter, r *http.Request) {
