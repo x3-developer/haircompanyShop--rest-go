@@ -9,6 +9,7 @@ import (
 
 type Repository interface {
 	Create(model *model.DashboardUser) (*model.DashboardUser, error)
+	GetByID(id uint) (*model.DashboardUser, error)
 	GetByEmail(email string) (*model.DashboardUser, error)
 }
 
@@ -29,6 +30,21 @@ func (r *repository) Create(model *model.DashboardUser) (*model.DashboardUser, e
 	}
 
 	return model, nil
+}
+
+func (r *repository) GetByID(id uint) (*model.DashboardUser, error) {
+	var user *model.DashboardUser
+	var err error
+
+	result := r.DB.First(&user, id)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		err = result.Error
+	}
+
+	return user, err
 }
 
 func (r *repository) GetByEmail(email string) (*model.DashboardUser, error) {

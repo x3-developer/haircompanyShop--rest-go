@@ -13,6 +13,7 @@ type Container struct {
 	JWTService      services.JWTService
 	FileService     services.FileSystemService
 	PasswordService services.PasswordService
+	RedisService    services.RedisService
 	Ctx             context.Context
 	Wg              *sync.WaitGroup
 }
@@ -22,12 +23,14 @@ func NewContainer(cfg *config.Config, ctx context.Context, wg *sync.WaitGroup) *
 	jwtSvc := services.NewJWTService(cfg.DashboardSecret, cfg.ClientSecret)
 	fileSvc := services.NewFileSystemService()
 	passwordSvc := services.NewPasswordService()
+	redisSvc := services.NewRedisService(ctx, cfg.RedisAddr, cfg.RedisPassword, cfg.RedisDB)
 
 	return &Container{
 		DB:              db,
 		JWTService:      jwtSvc,
 		FileService:     fileSvc,
 		PasswordService: passwordSvc,
+		RedisService:    redisSvc,
 		Ctx:             ctx,
 		Wg:              wg,
 	}

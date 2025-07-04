@@ -48,3 +48,28 @@ func (h *Handler) DashboardLogin(w http.ResponseWriter, r *http.Request) {
 
 	response.SendSuccess(w, http.StatusOK, authData)
 }
+
+func (h *Handler) DashboardRefreshToken(w http.ResponseWriter, r *http.Request) {
+	refreshTokenDto, err := request.DecodeBody[dto.RefreshTokenDTO](r.Body)
+	if err != nil {
+		msg := fmt.Sprintf("invalid request body: %v", err)
+		response.SendError(w, http.StatusBadRequest, msg, response.BadRequest)
+		return
+	}
+
+	errFields := constraint.ValidateDTO(refreshTokenDto)
+	if errFields != nil {
+		msg := "validation errors occurred"
+		response.SendValidationError(w, http.StatusBadRequest, msg, response.BadRequest, errFields)
+		return
+	}
+
+	tokenPair, err := h.svc.DashboardRefreshToken(refreshTokenDto)
+	if err != nil {
+		msg := fmt.Sprintf("failed to refresh token: %v", err)
+		response.SendError(w, http.StatusUnauthorized, msg, response.Unauthorized)
+		return
+	}
+
+	response.SendSuccess(w, http.StatusOK, tokenPair)
+}

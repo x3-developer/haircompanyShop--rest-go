@@ -3,6 +3,7 @@ package config
 import (
 	"log"
 	"os"
+	"strconv"
 )
 
 type Config struct {
@@ -18,6 +19,9 @@ type Config struct {
 	AuthAppKey      string
 	DashboardSecret string
 	ClientSecret    string
+	RedisAddr       string
+	RedisPassword   string
+	RedisDB         int
 }
 
 func LoadConfig() *Config {
@@ -81,6 +85,22 @@ func LoadConfig() *Config {
 		log.Fatal("JWT_CLIENT_SECRET_KEY environment isn't set")
 	}
 
+	redisAddr := os.Getenv("REDIS_ADDR")
+	if redisAddr == "" {
+		log.Fatal("REDIS_ADDR environment isn't set")
+	}
+
+	redisPassword := os.Getenv("REDIS_PASSWORD")
+
+	redisDB := os.Getenv("REDIS_DB")
+	if redisDB == "" {
+		redisDB = "0"
+	}
+	redisDBInt, err := strconv.Atoi(redisDB)
+	if err != nil {
+		log.Fatal("Invalid REDIS_DB value: ", err)
+	}
+
 	return &Config{
 		AppEnv:          appEnv,
 		AppPort:         appPort,
@@ -94,5 +114,8 @@ func LoadConfig() *Config {
 		AuthAppKey:      authAppKey,
 		DashboardSecret: dashboardSecret,
 		ClientSecret:    clientSecret,
+		RedisAddr:       redisAddr,
+		RedisPassword:   redisPassword,
+		RedisDB:         redisDBInt,
 	}
 }
