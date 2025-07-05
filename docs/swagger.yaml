@@ -251,6 +251,82 @@ definitions:
         example: Bad request or validation error
         type: string
     type: object
+  docsResponse.ProductTypeCreate201:
+    properties:
+      data:
+        $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_product_type_dto.ResponseDTO'
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.ProductTypeCreate400:
+    properties:
+      errorCode:
+        enum:
+        - BAD_REQUEST
+        type: string
+      fields:
+        items:
+          $ref: '#/definitions/docsResponse.categoryErrorField'
+        type: array
+      isSuccess:
+        example: false
+        type: boolean
+      message:
+        example: Bad request or validation error
+        type: string
+    type: object
+  docsResponse.ProductTypeDelete200:
+    properties:
+      data:
+        $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_product_type_dto.ResponseDTO'
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.ProductTypeGetById200:
+    properties:
+      data:
+        $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_product_type_dto.ResponseDTO'
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.ProductTypeList200:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_product_type_dto.ResponseDTO'
+        type: array
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.ProductTypeUpdate200:
+    properties:
+      data:
+        $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_product_type_dto.ResponseDTO'
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.ProductTypeUpdate400:
+    properties:
+      errorCode:
+        enum:
+        - BAD_REQUEST
+        type: string
+      fields:
+        items:
+          $ref: '#/definitions/docsResponse.categoryErrorField'
+        type: array
+      isSuccess:
+        example: false
+        type: boolean
+      message:
+        example: Bad request or validation error
+        type: string
+    type: object
   docsResponse.Response400:
     properties:
       errorCode:
@@ -603,6 +679,37 @@ definitions:
     properties:
       color:
         type: string
+      name:
+        maxLength: 255
+        minLength: 3
+        type: string
+    type: object
+  haircompany-shop-rest_internal_modules_v1_product_type_dto.CreateDTO:
+    properties:
+      name:
+        maxLength: 255
+        minLength: 3
+        type: string
+    required:
+    - name
+    type: object
+  haircompany-shop-rest_internal_modules_v1_product_type_dto.ResponseDTO:
+    properties:
+      createdAt:
+        example: "2023-10-01T12:00:00Z"
+        type: string
+      id:
+        example: 1
+        type: integer
+      name:
+        example: Product type Name
+        type: string
+      updatedAt:
+        example: "2023-10-01T12:00:00Z"
+        type: string
+    type: object
+  haircompany-shop-rest_internal_modules_v1_product_type_dto.UpdateDTO:
+    properties:
       name:
         maxLength: 255
         minLength: 3
@@ -1175,6 +1282,199 @@ paths:
       summary: Create a new line
       tags:
       - Line
+  /api/v1/product-type:
+    get:
+      description: Retrieve all productTypes
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of productTypes
+          schema:
+            $ref: '#/definitions/docsResponse.ProductTypeList200'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - AppAuth: []
+      summary: Get all productTypes
+      tags:
+      - ProductType
+  /api/v1/product-type/{id}:
+    get:
+      description: Retrieve productType by its ID
+      parameters:
+      - description: ProductType ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ProductType found
+          schema:
+            $ref: '#/definitions/docsResponse.ProductTypeGetById200'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/docsResponse.Response400'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
+        "404":
+          description: ProductType not found
+          schema:
+            $ref: '#/definitions/docsResponse.Response404'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - AppAuth: []
+      summary: Get productType by ID
+      tags:
+      - ProductType
+  /api/v1/product-type/{id}/delete:
+    delete:
+      description: Delete productType by ID
+      parameters:
+      - description: ProductType ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ProductType deleted
+          schema:
+            $ref: '#/definitions/docsResponse.ProductTypeDelete200'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/docsResponse.Response400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docsResponse.Response401'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
+        "404":
+          description: ProductType not found
+          schema:
+            $ref: '#/definitions/docsResponse.Response404'
+        "409":
+          description: ProductType has linked entities
+          schema:
+            $ref: '#/definitions/docsResponse.Response409'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - BearerAuth: []
+      - AppAuth: []
+      summary: Delete productType
+      tags:
+      - ProductType
+  /api/v1/product-type/{id}/update:
+    put:
+      consumes:
+      - application/json
+      description: Update productType by ID
+      parameters:
+      - description: ProductType ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: ProductType update payload
+        in: body
+        name: productType
+        required: true
+        schema:
+          $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_product_type_dto.UpdateDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ProductType updated
+          schema:
+            $ref: '#/definitions/docsResponse.ProductTypeUpdate200'
+        "400":
+          description: Bad request or validation error
+          schema:
+            $ref: '#/definitions/docsResponse.ProductTypeUpdate400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docsResponse.Response401'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - BearerAuth: []
+      - AppAuth: []
+      summary: Update productType
+      tags:
+      - ProductType
+  /api/v1/product-type/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new productType
+      parameters:
+      - description: ProductType to create
+        in: body
+        name: productType
+        required: true
+        schema:
+          $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_product_type_dto.CreateDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: ProductType created successfully
+          schema:
+            $ref: '#/definitions/docsResponse.ProductTypeCreate201'
+        "400":
+          description: Bad Request or Validation Error
+          schema:
+            $ref: '#/definitions/docsResponse.ProductTypeCreate400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docsResponse.Response401'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
+        "500":
+          description: Server Error
+          schema:
+            $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - BearerAuth: []
+      - AppAuth: []
+      summary: Create a new productType
+      tags:
+      - ProductType
 schemes:
 - http
 - https

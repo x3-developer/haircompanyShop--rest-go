@@ -11,6 +11,7 @@ import (
 	"haircompany-shop-rest/internal/modules/v1/dashboard_user"
 	"haircompany-shop-rest/internal/modules/v1/image"
 	"haircompany-shop-rest/internal/modules/v1/line"
+	"haircompany-shop-rest/internal/modules/v1/product_type"
 	"net/http"
 )
 
@@ -23,14 +24,15 @@ func NewRouter(cfg *config.Config, container *container.Container) http.Handler 
 	category.RegisterV1CategoryRoutes(v1, container)
 	dashboard_user.RegisterV1DashboardUserRoutes(v1, container)
 	line.RegisterV1LineRoutes(v1, container)
+	product_type.RegisterV1ProductTypeRoutes(v1, container)
 
 	apiHandler := middleware.ChainMiddleware(
 		v1,
 		middleware.APIMiddleware(cfg.AuthAppKey),
 		middleware.CORSMiddleware(cfg.CORS),
 	)
-
 	mux.Handle("/api/v1/", http.StripPrefix("/api/v1", apiHandler))
+
 	if cfg.AppEnv != "production" {
 		mux.HandleFunc("/swagger/", httpSwagger.WrapHandler)
 	}

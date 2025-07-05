@@ -899,6 +899,313 @@
                     }
                 }
             }
+        },
+        "/api/v1/product-type": {
+            "get": {
+                "security": [
+                    {
+                        "AppAuth": []
+                    }
+                ],
+                "description": "Retrieve all productTypes",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ProductType"
+                ],
+                "summary": "Get all productTypes",
+                "responses": {
+                    "200": {
+                        "description": "List of productTypes",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.ProductTypeList200"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Invalid X-AUTH-APP",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response403"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response500"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/product-type/create": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    },
+                    {
+                        "AppAuth": []
+                    }
+                ],
+                "description": "Create a new productType",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ProductType"
+                ],
+                "summary": "Create a new productType",
+                "parameters": [
+                    {
+                        "description": "ProductType to create",
+                        "name": "productType",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_product_type_dto.CreateDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "ProductType created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.ProductTypeCreate201"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request or Validation Error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.ProductTypeCreate400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Invalid X-AUTH-APP",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response403"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response500"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/product-type/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "AppAuth": []
+                    }
+                ],
+                "description": "Retrieve productType by its ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ProductType"
+                ],
+                "summary": "Get productType by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ProductType ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ProductType found",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.ProductTypeGetById200"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response400"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Invalid X-AUTH-APP",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response403"
+                        }
+                    },
+                    "404": {
+                        "description": "ProductType not found",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response404"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response500"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/product-type/{id}/delete": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    },
+                    {
+                        "AppAuth": []
+                    }
+                ],
+                "description": "Delete productType by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ProductType"
+                ],
+                "summary": "Delete productType",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ProductType ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ProductType deleted",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.ProductTypeDelete200"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Invalid X-AUTH-APP",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response403"
+                        }
+                    },
+                    "404": {
+                        "description": "ProductType not found",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response404"
+                        }
+                    },
+                    "409": {
+                        "description": "ProductType has linked entities",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response409"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response500"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/product-type/{id}/update": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    },
+                    {
+                        "AppAuth": []
+                    }
+                ],
+                "description": "Update productType by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ProductType"
+                ],
+                "summary": "Update productType",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ProductType ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "ProductType update payload",
+                        "name": "productType",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_product_type_dto.UpdateDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ProductType updated",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.ProductTypeUpdate200"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request or validation error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.ProductTypeUpdate400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Invalid X-AUTH-APP",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response403"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response500"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -1252,6 +1559,119 @@
             }
         },
         "docsResponse.LineUpdate400": {
+            "type": "object",
+            "properties": {
+                "errorCode": {
+                    "type": "string",
+                    "enum": [
+                        "BAD_REQUEST"
+                    ]
+                },
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/docsResponse.categoryErrorField"
+                    }
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Bad request or validation error"
+                }
+            }
+        },
+        "docsResponse.ProductTypeCreate201": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_product_type_dto.ResponseDTO"
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "docsResponse.ProductTypeCreate400": {
+            "type": "object",
+            "properties": {
+                "errorCode": {
+                    "type": "string",
+                    "enum": [
+                        "BAD_REQUEST"
+                    ]
+                },
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/docsResponse.categoryErrorField"
+                    }
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Bad request or validation error"
+                }
+            }
+        },
+        "docsResponse.ProductTypeDelete200": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_product_type_dto.ResponseDTO"
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "docsResponse.ProductTypeGetById200": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_product_type_dto.ResponseDTO"
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "docsResponse.ProductTypeList200": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_product_type_dto.ResponseDTO"
+                    }
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "docsResponse.ProductTypeUpdate200": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_product_type_dto.ResponseDTO"
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "docsResponse.ProductTypeUpdate400": {
             "type": "object",
             "properties": {
                 "errorCode": {
@@ -1782,6 +2202,50 @@
                 "color": {
                     "type": "string"
                 },
+                "name": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 3
+                }
+            }
+        },
+        "haircompany-shop-rest_internal_modules_v1_product_type_dto.CreateDTO": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 3
+                }
+            }
+        },
+        "haircompany-shop-rest_internal_modules_v1_product_type_dto.ResponseDTO": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string",
+                    "example": "2023-10-01T12:00:00Z"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Product type Name"
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "example": "2023-10-01T12:00:00Z"
+                }
+            }
+        },
+        "haircompany-shop-rest_internal_modules_v1_product_type_dto.UpdateDTO": {
+            "type": "object",
+            "properties": {
                 "name": {
                     "type": "string",
                     "maxLength": 255,
