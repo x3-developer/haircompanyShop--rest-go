@@ -2,7 +2,6 @@ package category
 
 import (
 	"fmt"
-	_ "haircompany-shop-rest/docs/response"
 	"haircompany-shop-rest/internal/constraint"
 	"haircompany-shop-rest/internal/modules/v1/category/dto"
 	"haircompany-shop-rest/pkg/request"
@@ -22,16 +21,17 @@ func NewHandler(s Service) *Handler {
 }
 
 // Create creates a new category
-// @Summary      Create a new category
-// @Description  Create a new category
-// @Tags         Category
-// @Accept       json
-// @Produce      json
-// @Param        category  body      dto.CreateDTO true 			"Category to create"
-// @Success      201       {object}  docsResponse.Category201       "Category created successfully"
-// @Failure      400       {object}  docsResponse.CategoryCreate400 "Bad Request or Validation Error"
-// @Failure      500       {object}  docsResponse.Category500       "Server Error"
-// @Router       /api/v1/category [post]
+//
+//	@Summary		Create a new category
+//	@Description	Create a new category
+//	@Tags			Category
+//	@Accept			json
+//	@Produce		json
+//	@Param			category	body		dto.CreateDTO					true	"Category to create"
+//	@Success		201			{object}	docsResponse.CategoryCreate201	"Category created successfully"
+//	@Failure		400			{object}	docsResponse.CategoryCreate400	"Bad Request or Validation Error"
+//	@Failure		500			{object}	docsResponse.Response500		"Server Error"
+//	@Router			/api/v1/category [post]
 func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 	createDto, err := request.DecodeBody[dto.CreateDTO](r.Body)
 	if err != nil {
@@ -63,13 +63,14 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 // GetAll retrieves all categories
-// @Summary      Get all categories
-// @Description  Retrieve all categories
-// @Tags         Category
-// @Produce      json
-// @Success      200  {object}  docsResponse.CategoryList200  "List of categories"
-// @Failure      500  {object}  docsResponse.Category500      "Server error"
-// @Router       /api/v1/category [get]
+//
+//	@Summary		Get all categories
+//	@Description	Retrieve all categories
+//	@Tags			Category
+//	@Produce		json
+//	@Success		200	{object}	docsResponse.CategoryList200	"List of categories"
+//	@Failure		500	{object}	docsResponse.Response500		"Server error"
+//	@Router			/api/v1/category [get]
 func (h *Handler) GetAll(w http.ResponseWriter) {
 	categories, err := h.svc.GetAll()
 	if err != nil {
@@ -82,16 +83,17 @@ func (h *Handler) GetAll(w http.ResponseWriter) {
 }
 
 // GetById retrieves a category by its ID
-// @Summary      Get category by ID
-// @Description  Retrieve category by its ID
-// @Tags         Category
-// @Produce      json
-// @Param        id   path      int  true  						 "Category ID"
-// @Success      200  {object}  docsResponse.CategoryGetById200  "Category found"
-// @Failure      400  {object}  docsResponse.CategoryGetById400  "Invalid ID"
-// @Failure      404  {object}  docsResponse.CategoryGetById404  "Category not found"
-// @Failure      500  {object}  docsResponse.Category500         "Server error"
-// @Router       /api/v1/category/{id} [get]
+//
+//	@Summary		Get category by ID
+//	@Description	Retrieve category by its ID
+//	@Tags			Category
+//	@Produce		json
+//	@Param			id	path		int								true	"Category ID"
+//	@Success		200	{object}	docsResponse.CategoryGetById200	"Category found"
+//	@Failure		400	{object}	docsResponse.Response400		"Invalid ID"
+//	@Failure		404	{object}	docsResponse.Response404		"Category not found"
+//	@Failure		500	{object}	docsResponse.Response500		"Server error"
+//	@Router			/api/v1/category/{id} [get]
 func (h *Handler) GetById(w http.ResponseWriter, r *http.Request) {
 	idStr := r.PathValue("id")
 	if idStr == "" {
@@ -123,17 +125,18 @@ func (h *Handler) GetById(w http.ResponseWriter, r *http.Request) {
 }
 
 // Update updates a category by its ID
-// @Summary      Update category
-// @Description  Update category by ID
-// @Tags         Category
-// @Accept       json
-// @Produce      json
-// @Param        id       path      int               true  		"Category ID"
-// @Param        category body      dto.UpdateDTO     true  		"Category update payload"
-// @Success      200      {object}  docsResponse.CategoryUpdate200  "Category updated"
-// @Failure      400      {object}  docsResponse.CategoryUpdate400  "Bad request or validation error"
-// @Failure      500      {object}  docsResponse.Category500        "Server error"
-// @Router       /api/v1/category/{id} [put]
+//
+//	@Summary		Update category
+//	@Description	Update category by ID
+//	@Tags			Category
+//	@Accept			json
+//	@Produce		json
+//	@Param			id			path		int								true	"Category ID"
+//	@Param			category	body		dto.UpdateDTO					true	"Category update payload"
+//	@Success		200			{object}	docsResponse.CategoryUpdate200	"Category updated"
+//	@Failure		400			{object}	docsResponse.CategoryUpdate400	"Bad request or validation error"
+//	@Failure		500			{object}	docsResponse.Response500		"Server error"
+//	@Router			/api/v1/category/{id} [put]
 func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
 	idStr := r.PathValue("id")
 	if idStr == "" {
@@ -179,17 +182,18 @@ func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
 }
 
 // Delete deletes a category by its ID
-// @Summary      Delete category
-// @Description  Delete category by ID
-// @Tags         Category
-// @Produce      json
-// @Param        id   path      int  true  						"Category ID"
-// @Success      200  {object}  docsResponse.CategoryDelete200  "Category deleted"
-// @Failure      400  {object}  docsResponse.CategoryDelete400  "Invalid ID"
-// @Failure      404  {object}  docsResponse.CategoryDelete404  "Category not found"
-// @Failure      409  {object}  docsResponse.CategoryDelete409  "Category has linked entities"
-// @Failure      500  {object}  docsResponse.Category500         "Server error"
-// @Router       /api/v1/category/{id} [delete]
+//
+//	@Summary		Delete category
+//	@Description	Delete category by ID
+//	@Tags			Category
+//	@Produce		json
+//	@Param			id	path		int								true	"Category ID"
+//	@Success		200	{object}	docsResponse.CategoryDelete200	"Category deleted"
+//	@Failure		400	{object}	docsResponse.Response400		"Invalid ID"
+//	@Failure		404	{object}	docsResponse.Response404		"Category not found"
+//	@Failure		409	{object}	docsResponse.Response409		"Category has linked entities"
+//	@Failure		500	{object}	docsResponse.Response500		"Server error"
+//	@Router			/api/v1/category/{id} [delete]
 func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
 	idStr := r.PathValue("id")
 	if idStr == "" {

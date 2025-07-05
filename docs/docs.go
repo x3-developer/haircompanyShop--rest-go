@@ -9,7 +9,10 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "contact": {
+            "name": "API Support",
+            "email": "x3.na.tri@gmail.com"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -35,7 +38,7 @@ const docTemplate = `{
                     "500": {
                         "description": "Server error",
                         "schema": {
-                            "$ref": "#/definitions/docsResponse.Category500"
+                            "$ref": "#/definitions/docsResponse.Response500"
                         }
                     }
                 }
@@ -67,7 +70,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Category created successfully",
                         "schema": {
-                            "$ref": "#/definitions/docsResponse.Category201"
+                            "$ref": "#/definitions/docsResponse.CategoryCreate201"
                         }
                     },
                     "400": {
@@ -79,7 +82,7 @@ const docTemplate = `{
                     "500": {
                         "description": "Server Error",
                         "schema": {
-                            "$ref": "#/definitions/docsResponse.Category500"
+                            "$ref": "#/definitions/docsResponse.Response500"
                         }
                     }
                 }
@@ -114,19 +117,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Invalid ID",
                         "schema": {
-                            "$ref": "#/definitions/docsResponse.CategoryGetById400"
+                            "$ref": "#/definitions/docsResponse.Response400"
                         }
                     },
                     "404": {
                         "description": "Category not found",
                         "schema": {
-                            "$ref": "#/definitions/docsResponse.CategoryGetById404"
+                            "$ref": "#/definitions/docsResponse.Response404"
                         }
                     },
                     "500": {
                         "description": "Server error",
                         "schema": {
-                            "$ref": "#/definitions/docsResponse.Category500"
+                            "$ref": "#/definitions/docsResponse.Response500"
                         }
                     }
                 }
@@ -157,7 +160,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_category_dto.UpdateDTO"
+                            "$ref": "#/definitions/dto.UpdateDTO"
                         }
                     }
                 ],
@@ -177,7 +180,7 @@ const docTemplate = `{
                     "500": {
                         "description": "Server error",
                         "schema": {
-                            "$ref": "#/definitions/docsResponse.Category500"
+                            "$ref": "#/definitions/docsResponse.Response500"
                         }
                     }
                 }
@@ -210,25 +213,71 @@ const docTemplate = `{
                     "400": {
                         "description": "Invalid ID",
                         "schema": {
-                            "$ref": "#/definitions/docsResponse.CategoryDelete400"
+                            "$ref": "#/definitions/docsResponse.Response400"
                         }
                     },
                     "404": {
                         "description": "Category not found",
                         "schema": {
-                            "$ref": "#/definitions/docsResponse.CategoryDelete404"
+                            "$ref": "#/definitions/docsResponse.Response404"
                         }
                     },
                     "409": {
                         "description": "Category has linked entities",
                         "schema": {
-                            "$ref": "#/definitions/docsResponse.CategoryDelete409"
+                            "$ref": "#/definitions/docsResponse.Response409"
                         }
                     },
                     "500": {
                         "description": "Server error",
                         "schema": {
-                            "$ref": "#/definitions/docsResponse.Category500"
+                            "$ref": "#/definitions/docsResponse.Response500"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dashboard-user/create": {
+            "post": {
+                "description": "Create a new dashboard user with the provided details.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Dashboard User"
+                ],
+                "summary": "Create a new dashboard user",
+                "parameters": [
+                    {
+                        "description": "Dashboard User Create DTO",
+                        "name": "dashboardUser",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_dashboard_user_dto.CreateDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Dashboard User Created",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.DashboardUserCreate201"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request or Validation Error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.DashboardUserCreate400"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response500"
                         }
                     }
                 }
@@ -282,13 +331,13 @@ const docTemplate = `{
                     "413": {
                         "description": "File too large",
                         "schema": {
-                            "$ref": "#/definitions/docsResponse.ImageUpload413"
+                            "$ref": "#/definitions/docsResponse.Response413"
                         }
                     },
                     "500": {
                         "description": "Server Error",
                         "schema": {
-                            "$ref": "#/definitions/docsResponse.ImageUpload500"
+                            "$ref": "#/definitions/docsResponse.Response500"
                         }
                     }
                 }
@@ -296,7 +345,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "docsResponse.Category201": {
+        "docsResponse.CategoryCreate201": {
             "type": "object",
             "properties": {
                 "data": {
@@ -305,24 +354,6 @@ const docTemplate = `{
                 "isSuccess": {
                     "type": "boolean",
                     "example": true
-                }
-            }
-        },
-        "docsResponse.Category500": {
-            "type": "object",
-            "properties": {
-                "errorCode": {
-                    "type": "string",
-                    "enum": [
-                        "SERVER_ERROR"
-                    ]
-                },
-                "isSuccess": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "message": {
-                    "type": "string"
                 }
             }
         },
@@ -338,7 +369,7 @@ const docTemplate = `{
                 "fields": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/docsResponse.createField"
+                        "$ref": "#/definitions/docsResponse.categoryErrorField"
                     }
                 },
                 "isSuccess": {
@@ -346,7 +377,8 @@ const docTemplate = `{
                     "example": false
                 },
                 "message": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Bad request or validation error"
                 }
             }
         },
@@ -362,60 +394,6 @@ const docTemplate = `{
                 }
             }
         },
-        "docsResponse.CategoryDelete400": {
-            "type": "object",
-            "properties": {
-                "errorCode": {
-                    "type": "string",
-                    "enum": [
-                        "BAD_REQUEST"
-                    ]
-                },
-                "isSuccess": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "docsResponse.CategoryDelete404": {
-            "type": "object",
-            "properties": {
-                "errorCode": {
-                    "type": "string",
-                    "enum": [
-                        "NOT_FOUND"
-                    ]
-                },
-                "isSuccess": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "docsResponse.CategoryDelete409": {
-            "type": "object",
-            "properties": {
-                "errorCode": {
-                    "type": "string",
-                    "enum": [
-                        "HAS_LINKED_ENTITIES"
-                    ]
-                },
-                "isSuccess": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
         "docsResponse.CategoryGetById200": {
             "type": "object",
             "properties": {
@@ -425,42 +403,6 @@ const docTemplate = `{
                 "isSuccess": {
                     "type": "boolean",
                     "example": true
-                }
-            }
-        },
-        "docsResponse.CategoryGetById400": {
-            "type": "object",
-            "properties": {
-                "errorCode": {
-                    "type": "string",
-                    "enum": [
-                        "BAD_REQUEST"
-                    ]
-                },
-                "isSuccess": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "docsResponse.CategoryGetById404": {
-            "type": "object",
-            "properties": {
-                "errorCode": {
-                    "type": "string",
-                    "enum": [
-                        "NOT_FOUND"
-                    ]
-                },
-                "isSuccess": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "message": {
-                    "type": "string"
                 }
             }
         },
@@ -503,7 +445,7 @@ const docTemplate = `{
                 "fields": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/docsResponse.createField"
+                        "$ref": "#/definitions/docsResponse.categoryErrorField"
                     }
                 },
                 "isSuccess": {
@@ -511,7 +453,45 @@ const docTemplate = `{
                     "example": false
                 },
                 "message": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Bad request or validation error"
+                }
+            }
+        },
+        "docsResponse.DashboardUserCreate201": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_category_dto.ResponseDTO"
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "docsResponse.DashboardUserCreate400": {
+            "type": "object",
+            "properties": {
+                "errorCode": {
+                    "type": "string",
+                    "enum": [
+                        "BAD_REQUEST"
+                    ]
+                },
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/docsResponse.dashboardUserErrorField"
+                    }
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Bad request or validation error"
                 }
             }
         },
@@ -539,7 +519,7 @@ const docTemplate = `{
                 "fields": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/docsResponse.imageField"
+                        "$ref": "#/definitions/docsResponse.imageErrorField"
                     }
                 },
                 "isSuccess": {
@@ -548,11 +528,68 @@ const docTemplate = `{
                 },
                 "message": {
                     "type": "string",
-                    "example": "validation errors occurred"
+                    "example": "Bad request or validation error"
                 }
             }
         },
-        "docsResponse.ImageUpload413": {
+        "docsResponse.Response400": {
+            "type": "object",
+            "properties": {
+                "errorCode": {
+                    "type": "string",
+                    "enum": [
+                        "BAD_REQUEST"
+                    ]
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Bad request or validation error"
+                }
+            }
+        },
+        "docsResponse.Response404": {
+            "type": "object",
+            "properties": {
+                "errorCode": {
+                    "type": "string",
+                    "enum": [
+                        "NOT_FOUND"
+                    ]
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Resource not found"
+                }
+            }
+        },
+        "docsResponse.Response409": {
+            "type": "object",
+            "properties": {
+                "errorCode": {
+                    "type": "string",
+                    "enum": [
+                        "HAS_LINKED_ENTITIES"
+                    ]
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Conflict"
+                }
+            }
+        },
+        "docsResponse.Response413": {
             "type": "object",
             "properties": {
                 "errorCode": {
@@ -567,11 +604,11 @@ const docTemplate = `{
                 },
                 "message": {
                     "type": "string",
-                    "example": "file too large"
+                    "example": "Request entity too large"
                 }
             }
         },
-        "docsResponse.ImageUpload500": {
+        "docsResponse.Response500": {
             "type": "object",
             "properties": {
                 "errorCode": {
@@ -586,11 +623,11 @@ const docTemplate = `{
                 },
                 "message": {
                     "type": "string",
-                    "example": "failed to upload image"
+                    "example": "Internal server error"
                 }
             }
         },
-        "docsResponse.createField": {
+        "docsResponse.categoryErrorField": {
             "type": "object",
             "properties": {
                 "errorCode": {
@@ -610,7 +647,27 @@ const docTemplate = `{
                 }
             }
         },
-        "docsResponse.imageField": {
+        "docsResponse.dashboardUserErrorField": {
+            "type": "object",
+            "properties": {
+                "errorCode": {
+                    "type": "string",
+                    "enum": [
+                        "NOT_UNIQUE",
+                        "NOT_FOUND"
+                    ]
+                },
+                "field": {
+                    "type": "string",
+                    "enum": [
+                        "name",
+                        "slug",
+                        "parentId"
+                    ]
+                }
+            }
+        },
+        "docsResponse.imageErrorField": {
             "type": "object",
             "properties": {
                 "errorCode": {
@@ -620,6 +677,58 @@ const docTemplate = `{
                 "field": {
                     "type": "string",
                     "example": "images"
+                }
+            }
+        },
+        "dto.UpdateDTO": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "headerImage": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "isShade": {
+                    "type": "boolean"
+                },
+                "isVisibleInMenu": {
+                    "type": "boolean"
+                },
+                "isVisibleOnMain": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 3
+                },
+                "parentId": {
+                    "type": "integer"
+                },
+                "seoDescription": {
+                    "type": "string"
+                },
+                "seoKeys": {
+                    "type": "string"
+                },
+                "seoTitle": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 3
+                },
+                "sortIndex": {
+                    "type": "integer",
+                    "minimum": 0
                 }
             }
         },
@@ -744,55 +853,28 @@ const docTemplate = `{
                 }
             }
         },
-        "haircompany-shop-rest_internal_modules_v1_category_dto.UpdateDTO": {
+        "haircompany-shop-rest_internal_modules_v1_dashboard_user_dto.CreateDTO": {
             "type": "object",
+            "required": [
+                "email",
+                "password",
+                "role"
+            ],
             "properties": {
-                "description": {
+                "email": {
                     "type": "string"
                 },
-                "headerImage": {
-                    "type": "string"
-                },
-                "image": {
-                    "type": "string"
-                },
-                "isActive": {
-                    "type": "boolean"
-                },
-                "isShade": {
-                    "type": "boolean"
-                },
-                "isVisibleInMenu": {
-                    "type": "boolean"
-                },
-                "isVisibleOnMain": {
-                    "type": "boolean"
-                },
-                "name": {
+                "password": {
                     "type": "string",
                     "maxLength": 255,
-                    "minLength": 3
+                    "minLength": 8
                 },
-                "parentId": {
-                    "type": "integer"
-                },
-                "seoDescription": {
-                    "type": "string"
-                },
-                "seoKeys": {
-                    "type": "string"
-                },
-                "seoTitle": {
-                    "type": "string"
-                },
-                "slug": {
+                "role": {
                     "type": "string",
-                    "maxLength": 255,
-                    "minLength": 3
-                },
-                "sortIndex": {
-                    "type": "integer",
-                    "minimum": 0
+                    "enum": [
+                        "admin",
+                        "manager"
+                    ]
                 }
             }
         },
@@ -804,17 +886,25 @@ const docTemplate = `{
                 }
             }
         }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "description": "Введите токен в формате: Bearer {token}",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
     }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
-	Host:             "",
-	BasePath:         "",
-	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Version:          "1.0",
+	Host:             "https://{host}:{port}",
+	BasePath:         "/api/v1",
+	Schemes:          []string{"http", "https"},
+	Title:            "Hair Company Shop API",
+	Description:      "REST API для магазина бренда Hair Company",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

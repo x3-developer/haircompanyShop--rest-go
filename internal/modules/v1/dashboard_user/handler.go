@@ -20,6 +20,18 @@ func NewHandler(s Service) *Handler {
 	}
 }
 
+// Create creates a new dashboard user
+//
+//	@Summary		Create a new dashboard user
+//	@Description	Create a new dashboard user with the provided details.
+//	@Tags			Dashboard User
+//	@Accept			json
+//	@Produce		json
+//	@Param			dashboardUser	body		dto.CreateDTO						true	"Dashboard User Create DTO"
+//	@Success		201				{object}	docsResponse.DashboardUserCreate201	"Dashboard User Created"
+//	@Failure		400				{object}	docsResponse.DashboardUserCreate400	"Bad Request or Validation Error"
+//	@Failure		500				{object}	docsResponse.Response500			"Server Error"
+//	@Router			/api/v1/dashboard-user/create [post]
 func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 	createDto, err := request.DecodeBody[dto.CreateDTO](r.Body)
 	if err != nil {

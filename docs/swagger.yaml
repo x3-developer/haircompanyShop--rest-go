@@ -1,23 +1,12 @@
+basePath: /api/v1
 definitions:
-  docsResponse.Category201:
+  docsResponse.CategoryCreate201:
     properties:
       data:
         $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_category_dto.ResponseDTO'
       isSuccess:
         example: true
         type: boolean
-    type: object
-  docsResponse.Category500:
-    properties:
-      errorCode:
-        enum:
-        - SERVER_ERROR
-        type: string
-      isSuccess:
-        example: false
-        type: boolean
-      message:
-        type: string
     type: object
   docsResponse.CategoryCreate400:
     properties:
@@ -27,12 +16,13 @@ definitions:
         type: string
       fields:
         items:
-          $ref: '#/definitions/docsResponse.createField'
+          $ref: '#/definitions/docsResponse.categoryErrorField'
         type: array
       isSuccess:
         example: false
         type: boolean
       message:
+        example: Bad request or validation error
         type: string
     type: object
   docsResponse.CategoryDelete200:
@@ -43,42 +33,6 @@ definitions:
         example: true
         type: boolean
     type: object
-  docsResponse.CategoryDelete400:
-    properties:
-      errorCode:
-        enum:
-        - BAD_REQUEST
-        type: string
-      isSuccess:
-        example: false
-        type: boolean
-      message:
-        type: string
-    type: object
-  docsResponse.CategoryDelete404:
-    properties:
-      errorCode:
-        enum:
-        - NOT_FOUND
-        type: string
-      isSuccess:
-        example: false
-        type: boolean
-      message:
-        type: string
-    type: object
-  docsResponse.CategoryDelete409:
-    properties:
-      errorCode:
-        enum:
-        - HAS_LINKED_ENTITIES
-        type: string
-      isSuccess:
-        example: false
-        type: boolean
-      message:
-        type: string
-    type: object
   docsResponse.CategoryGetById200:
     properties:
       data:
@@ -86,30 +40,6 @@ definitions:
       isSuccess:
         example: true
         type: boolean
-    type: object
-  docsResponse.CategoryGetById400:
-    properties:
-      errorCode:
-        enum:
-        - BAD_REQUEST
-        type: string
-      isSuccess:
-        example: false
-        type: boolean
-      message:
-        type: string
-    type: object
-  docsResponse.CategoryGetById404:
-    properties:
-      errorCode:
-        enum:
-        - NOT_FOUND
-        type: string
-      isSuccess:
-        example: false
-        type: boolean
-      message:
-        type: string
     type: object
   docsResponse.CategoryList200:
     properties:
@@ -137,12 +67,38 @@ definitions:
         type: string
       fields:
         items:
-          $ref: '#/definitions/docsResponse.createField'
+          $ref: '#/definitions/docsResponse.categoryErrorField'
         type: array
       isSuccess:
         example: false
         type: boolean
       message:
+        example: Bad request or validation error
+        type: string
+    type: object
+  docsResponse.DashboardUserCreate201:
+    properties:
+      data:
+        $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_category_dto.ResponseDTO'
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.DashboardUserCreate400:
+    properties:
+      errorCode:
+        enum:
+        - BAD_REQUEST
+        type: string
+      fields:
+        items:
+          $ref: '#/definitions/docsResponse.dashboardUserErrorField'
+        type: array
+      isSuccess:
+        example: false
+        type: boolean
+      message:
+        example: Bad request or validation error
         type: string
     type: object
   docsResponse.ImageUpload200:
@@ -161,16 +117,55 @@ definitions:
         type: string
       fields:
         items:
-          $ref: '#/definitions/docsResponse.imageField'
+          $ref: '#/definitions/docsResponse.imageErrorField'
         type: array
       isSuccess:
         example: false
         type: boolean
       message:
-        example: validation errors occurred
+        example: Bad request or validation error
         type: string
     type: object
-  docsResponse.ImageUpload413:
+  docsResponse.Response400:
+    properties:
+      errorCode:
+        enum:
+        - BAD_REQUEST
+        type: string
+      isSuccess:
+        example: false
+        type: boolean
+      message:
+        example: Bad request or validation error
+        type: string
+    type: object
+  docsResponse.Response404:
+    properties:
+      errorCode:
+        enum:
+        - NOT_FOUND
+        type: string
+      isSuccess:
+        example: false
+        type: boolean
+      message:
+        example: Resource not found
+        type: string
+    type: object
+  docsResponse.Response409:
+    properties:
+      errorCode:
+        enum:
+        - HAS_LINKED_ENTITIES
+        type: string
+      isSuccess:
+        example: false
+        type: boolean
+      message:
+        example: Conflict
+        type: string
+    type: object
+  docsResponse.Response413:
     properties:
       errorCode:
         enum:
@@ -180,10 +175,10 @@ definitions:
         example: false
         type: boolean
       message:
-        example: file too large
+        example: Request entity too large
         type: string
     type: object
-  docsResponse.ImageUpload500:
+  docsResponse.Response500:
     properties:
       errorCode:
         enum:
@@ -193,10 +188,10 @@ definitions:
         example: false
         type: boolean
       message:
-        example: failed to upload image
+        example: Internal server error
         type: string
     type: object
-  docsResponse.createField:
+  docsResponse.categoryErrorField:
     properties:
       errorCode:
         enum:
@@ -210,7 +205,21 @@ definitions:
         - parentId
         type: string
     type: object
-  docsResponse.imageField:
+  docsResponse.dashboardUserErrorField:
+    properties:
+      errorCode:
+        enum:
+        - NOT_UNIQUE
+        - NOT_FOUND
+        type: string
+      field:
+        enum:
+        - name
+        - slug
+        - parentId
+        type: string
+    type: object
+  docsResponse.imageErrorField:
     properties:
       errorCode:
         example: INVALID_FORMAT
@@ -218,6 +227,42 @@ definitions:
       field:
         example: images
         type: string
+    type: object
+  dto.UpdateDTO:
+    properties:
+      description:
+        type: string
+      headerImage:
+        type: string
+      image:
+        type: string
+      isActive:
+        type: boolean
+      isShade:
+        type: boolean
+      isVisibleInMenu:
+        type: boolean
+      isVisibleOnMain:
+        type: boolean
+      name:
+        maxLength: 255
+        minLength: 3
+        type: string
+      parentId:
+        type: integer
+      seoDescription:
+        type: string
+      seoKeys:
+        type: string
+      seoTitle:
+        type: string
+      slug:
+        maxLength: 255
+        minLength: 3
+        type: string
+      sortIndex:
+        minimum: 0
+        type: integer
     type: object
   haircompany-shop-rest_internal_modules_v1_category_dto.CreateDTO:
     properties:
@@ -304,49 +349,37 @@ definitions:
       updatedAt:
         type: string
     type: object
-  haircompany-shop-rest_internal_modules_v1_category_dto.UpdateDTO:
+  haircompany-shop-rest_internal_modules_v1_dashboard_user_dto.CreateDTO:
     properties:
-      description:
+      email:
         type: string
-      headerImage:
-        type: string
-      image:
-        type: string
-      isActive:
-        type: boolean
-      isShade:
-        type: boolean
-      isVisibleInMenu:
-        type: boolean
-      isVisibleOnMain:
-        type: boolean
-      name:
+      password:
         maxLength: 255
-        minLength: 3
+        minLength: 8
         type: string
-      parentId:
-        type: integer
-      seoDescription:
+      role:
+        enum:
+        - admin
+        - manager
         type: string
-      seoKeys:
-        type: string
-      seoTitle:
-        type: string
-      slug:
-        maxLength: 255
-        minLength: 3
-        type: string
-      sortIndex:
-        minimum: 0
-        type: integer
+    required:
+    - email
+    - password
+    - role
     type: object
   haircompany-shop-rest_internal_modules_v1_image_dto.ResponseDTO:
     properties:
       image:
         type: string
     type: object
+host: https://{host}:{port}
 info:
-  contact: {}
+  contact:
+    email: x3.na.tri@gmail.com
+    name: API Support
+  description: REST API для магазина бренда Hair Company
+  title: Hair Company Shop API
+  version: "1.0"
 paths:
   /api/v1/category:
     get:
@@ -361,7 +394,7 @@ paths:
         "500":
           description: Server error
           schema:
-            $ref: '#/definitions/docsResponse.Category500'
+            $ref: '#/definitions/docsResponse.Response500'
       summary: Get all categories
       tags:
       - Category
@@ -382,7 +415,7 @@ paths:
         "201":
           description: Category created successfully
           schema:
-            $ref: '#/definitions/docsResponse.Category201'
+            $ref: '#/definitions/docsResponse.CategoryCreate201'
         "400":
           description: Bad Request or Validation Error
           schema:
@@ -390,7 +423,7 @@ paths:
         "500":
           description: Server Error
           schema:
-            $ref: '#/definitions/docsResponse.Category500'
+            $ref: '#/definitions/docsResponse.Response500'
       summary: Create a new category
       tags:
       - Category
@@ -413,19 +446,19 @@ paths:
         "400":
           description: Invalid ID
           schema:
-            $ref: '#/definitions/docsResponse.CategoryDelete400'
+            $ref: '#/definitions/docsResponse.Response400'
         "404":
           description: Category not found
           schema:
-            $ref: '#/definitions/docsResponse.CategoryDelete404'
+            $ref: '#/definitions/docsResponse.Response404'
         "409":
           description: Category has linked entities
           schema:
-            $ref: '#/definitions/docsResponse.CategoryDelete409'
+            $ref: '#/definitions/docsResponse.Response409'
         "500":
           description: Server error
           schema:
-            $ref: '#/definitions/docsResponse.Category500'
+            $ref: '#/definitions/docsResponse.Response500'
       summary: Delete category
       tags:
       - Category
@@ -447,15 +480,15 @@ paths:
         "400":
           description: Invalid ID
           schema:
-            $ref: '#/definitions/docsResponse.CategoryGetById400'
+            $ref: '#/definitions/docsResponse.Response400'
         "404":
           description: Category not found
           schema:
-            $ref: '#/definitions/docsResponse.CategoryGetById404'
+            $ref: '#/definitions/docsResponse.Response404'
         "500":
           description: Server error
           schema:
-            $ref: '#/definitions/docsResponse.Category500'
+            $ref: '#/definitions/docsResponse.Response500'
       summary: Get category by ID
       tags:
       - Category
@@ -474,7 +507,7 @@ paths:
         name: category
         required: true
         schema:
-          $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_category_dto.UpdateDTO'
+          $ref: '#/definitions/dto.UpdateDTO'
       produces:
       - application/json
       responses:
@@ -489,10 +522,40 @@ paths:
         "500":
           description: Server error
           schema:
-            $ref: '#/definitions/docsResponse.Category500'
+            $ref: '#/definitions/docsResponse.Response500'
       summary: Update category
       tags:
       - Category
+  /api/v1/dashboard-user/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new dashboard user with the provided details.
+      parameters:
+      - description: Dashboard User Create DTO
+        in: body
+        name: dashboardUser
+        required: true
+        schema:
+          $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_dashboard_user_dto.CreateDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Dashboard User Created
+          schema:
+            $ref: '#/definitions/docsResponse.DashboardUserCreate201'
+        "400":
+          description: Bad Request or Validation Error
+          schema:
+            $ref: '#/definitions/docsResponse.DashboardUserCreate400'
+        "500":
+          description: Server Error
+          schema:
+            $ref: '#/definitions/docsResponse.Response500'
+      summary: Create a new dashboard user
+      tags:
+      - Dashboard User
   /api/v1/image/upload:
     post:
       consumes:
@@ -525,12 +588,21 @@ paths:
         "413":
           description: File too large
           schema:
-            $ref: '#/definitions/docsResponse.ImageUpload413'
+            $ref: '#/definitions/docsResponse.Response413'
         "500":
           description: Server Error
           schema:
-            $ref: '#/definitions/docsResponse.ImageUpload500'
+            $ref: '#/definitions/docsResponse.Response500'
       summary: Upload images
       tags:
       - Image
+schemes:
+- http
+- https
+securityDefinitions:
+  BearerAuth:
+    description: 'Введите токен в формате: Bearer {token}'
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

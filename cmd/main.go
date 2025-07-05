@@ -16,6 +16,18 @@ import (
 	"time"
 )
 
+// @title						Hair Company Shop API
+// @version					1.0
+// @description				REST API для магазина бренда Hair Company
+// @contact.name				API Support
+// @contact.email				x3.na.tri@gmail.com
+// @host						https://{host}:{port}
+// @BasePath					/api/v1
+// @schemes					http https
+// @securityDefinitions.apikey	BearerAuth
+// @in							header
+// @name						Authorization
+// @description				Введите токен в формате: Bearer {token}
 func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
@@ -45,8 +57,8 @@ func loadEnv() {
 }
 
 func newHTTPServer(cfg *config.Config, container *container.Container) *http.Server {
-	r := router.NewRouter(cfg.AppEnv, container)
-	r = middleware.ChainMiddleware(r, middleware.APIMiddleware(cfg.AuthAppKey), middleware.CORSMiddleware(cfg.CORS), middleware.RecoverMiddleware, middleware.LoggingMiddleware)
+	r := router.NewRouter(cfg, container)
+	r = middleware.ChainMiddleware(r, middleware.RecoverMiddleware, middleware.LoggingMiddleware)
 
 	return &http.Server{
 		Addr:    ":" + cfg.AppPort,
