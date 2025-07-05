@@ -25,6 +25,8 @@ func NewHandler(s Service) *Handler {
 //	@Summary		Create a new category
 //	@Description	Create a new category
 //	@Tags			Category
+//	@Security		BearerAuth
+//	@Param			Authorization	header		string						true	"Bearer {token}"
 //	@Accept			json
 //	@Produce		json
 //	@Param			category	body		dto.CreateDTO					true	"Category to create"
@@ -129,6 +131,8 @@ func (h *Handler) GetById(w http.ResponseWriter, r *http.Request) {
 //	@Summary		Update category
 //	@Description	Update category by ID
 //	@Tags			Category
+//	@Security		BearerAuth
+//	@Param			Authorization	header		string						true	"Bearer {token}"
 //	@Accept			json
 //	@Produce		json
 //	@Param			id			path		int								true	"Category ID"
@@ -186,6 +190,8 @@ func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
 //	@Summary		Delete category
 //	@Description	Delete category by ID
 //	@Tags			Category
+//	@Security		BearerAuth
+//	@Param			Authorization	header		string						true	"Bearer {token}"
 //	@Produce		json
 //	@Param			id	path		int								true	"Category ID"
 //	@Success		200	{object}	docsResponse.CategoryDelete200	"Category deleted"

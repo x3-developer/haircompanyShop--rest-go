@@ -18,6 +18,110 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/auth/dashboard/login": {
+            "post": {
+                "description": "Authenticate dashboard user with email and password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Dashboard user login",
+                "parameters": [
+                    {
+                        "description": "Login credentials",
+                        "name": "credentials",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.DashboardLoginDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Login successful",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.DashboardLogin200"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request or Validation Error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.DashboardLogin400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response401"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response500"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/dashboard/refresh-token": {
+            "post": {
+                "description": "Refresh authentication token for dashboard user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Dashboard refresh token",
+                "parameters": [
+                    {
+                        "description": "Refresh token",
+                        "name": "refreshToken",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.RefreshTokenDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Token refreshed successfully",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.DashboardRefreshToken200"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request or Validation Error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.DashboardRefreshToken400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized or Invalid Token",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response401"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response500"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/category": {
             "get": {
                 "description": "Retrieve all categories",
@@ -44,6 +148,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create a new category",
                 "consumes": [
                     "application/json"
@@ -56,6 +165,13 @@ const docTemplate = `{
                 ],
                 "summary": "Create a new category",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "description": "Category to create",
                         "name": "category",
@@ -135,6 +251,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update category by ID",
                 "consumes": [
                     "application/json"
@@ -147,6 +268,13 @@ const docTemplate = `{
                 ],
                 "summary": "Update category",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "integer",
                         "description": "Category ID",
@@ -186,6 +314,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete category by ID",
                 "produces": [
                     "application/json"
@@ -195,6 +328,13 @@ const docTemplate = `{
                 ],
                 "summary": "Delete category",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "integer",
                         "description": "Category ID",
@@ -239,6 +379,11 @@ const docTemplate = `{
         },
         "/api/v1/dashboard-user/create": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create a new dashboard user with the provided details.",
                 "consumes": [
                     "application/json"
@@ -251,6 +396,13 @@ const docTemplate = `{
                 ],
                 "summary": "Create a new dashboard user",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "description": "Dashboard User Create DTO",
                         "name": "dashboardUser",
@@ -285,7 +437,12 @@ const docTemplate = `{
         },
         "/api/v1/image/upload": {
             "post": {
-                "description": "Upload one or more images with a specific imageType",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Upload one or more images with a specific imageType. Requires JWT authentication.",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -297,6 +454,13 @@ const docTemplate = `{
                 ],
                 "summary": "Upload images",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "Type of image (e.g. category)",
@@ -326,6 +490,12 @@ const docTemplate = `{
                         "description": "Bad Request or Validation Error",
                         "schema": {
                             "$ref": "#/definitions/docsResponse.ImageUpload400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response401"
                         }
                     },
                     "413": {
@@ -458,6 +628,80 @@ const docTemplate = `{
                 }
             }
         },
+        "docsResponse.DashboardLogin200": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_auth_dto.ResponseDTO"
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "docsResponse.DashboardLogin400": {
+            "type": "object",
+            "properties": {
+                "errorCode": {
+                    "type": "string",
+                    "enum": [
+                        "BAD_REQUEST"
+                    ]
+                },
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/docsResponse.authErrorField"
+                    }
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Bad request or validation error"
+                }
+            }
+        },
+        "docsResponse.DashboardRefreshToken200": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_auth_dto.ResponseDTO"
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "docsResponse.DashboardRefreshToken400": {
+            "type": "object",
+            "properties": {
+                "errorCode": {
+                    "type": "string",
+                    "enum": [
+                        "BAD_REQUEST"
+                    ]
+                },
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/docsResponse.authErrorField"
+                    }
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Bad request or validation error"
+                }
+            }
+        },
         "docsResponse.DashboardUserCreate201": {
             "type": "object",
             "properties": {
@@ -551,6 +795,25 @@ const docTemplate = `{
                 }
             }
         },
+        "docsResponse.Response401": {
+            "type": "object",
+            "properties": {
+                "errorCode": {
+                    "type": "string",
+                    "enum": [
+                        "UNAUTHORIZED"
+                    ]
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Unauthorized"
+                }
+            }
+        },
         "docsResponse.Response404": {
             "type": "object",
             "properties": {
@@ -627,6 +890,29 @@ const docTemplate = `{
                 }
             }
         },
+        "docsResponse.authErrorField": {
+            "type": "object",
+            "properties": {
+                "errorCode": {
+                    "type": "string",
+                    "enum": [
+                        "REQUIRED",
+                        "INVALID_EMAIL",
+                        "MIN_LENGTH",
+                        "MAX_LENGTH",
+                        "INVALID_TOKEN"
+                    ]
+                },
+                "field": {
+                    "type": "string",
+                    "enum": [
+                        "email",
+                        "password",
+                        "refreshToken"
+                    ]
+                }
+            }
+        },
         "docsResponse.categoryErrorField": {
             "type": "object",
             "properties": {
@@ -680,6 +966,34 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.DashboardLoginDTO": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 8
+                }
+            }
+        },
+        "dto.RefreshTokenDTO": {
+            "type": "object",
+            "required": [
+                "refreshToken"
+            ],
+            "properties": {
+                "refreshToken": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.UpdateDTO": {
             "type": "object",
             "properties": {
@@ -729,6 +1043,20 @@ const docTemplate = `{
                 "sortIndex": {
                     "type": "integer",
                     "minimum": 0
+                }
+            }
+        },
+        "haircompany-shop-rest_internal_modules_v1_auth_dto.ResponseDTO": {
+            "type": "object",
+            "properties": {
+                "refreshExpiresAt": {
+                    "type": "integer"
+                },
+                "refreshToken": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
                 }
             }
         },

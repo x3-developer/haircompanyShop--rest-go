@@ -25,6 +25,8 @@ func NewHandler(s Service) *Handler {
 //	@Summary		Create a new dashboard user
 //	@Description	Create a new dashboard user with the provided details.
 //	@Tags			Dashboard User
+//	@Security		BearerAuth
+//	@Param			Authorization	header		string						true	"Bearer {token}"
 //	@Accept			json
 //	@Produce		json
 //	@Param			dashboardUser	body		dto.CreateDTO						true	"Dashboard User Create DTO"

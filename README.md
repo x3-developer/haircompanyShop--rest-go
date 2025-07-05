@@ -26,7 +26,6 @@ REST API для магазина бренда Hair Company, разработан
 - Go 1.24.3 или выше
 - PostgreSQL
 - Redis
-- Make (опционально)
 
 ### Шаги установки
 
@@ -128,6 +127,11 @@ cd docs
 ```bash
 cd docs
 ./generate-swagger.sh
+```
+
+### Форматирование Swagger документации
+```bash
+  swag fmt
 ```
 
 ### Создание новой миграции

@@ -23,7 +23,7 @@ func RegisterV1DashboardUserRoutes(mux *http.ServeMux, container *container.Cont
 					response.SendError(w, http.StatusMethodNotAllowed, msg, response.MethodNotAllowed)
 				}
 			}),
-			middleware.DashboardRoleMiddleware("admin", "manager"),
+			middleware.DashboardRoleMiddleware("admin"),
 			middleware.DashboardAuthMiddleware(container.JWTService),
 		),
 	)
