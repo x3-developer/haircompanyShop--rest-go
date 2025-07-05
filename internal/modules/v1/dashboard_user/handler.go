@@ -26,12 +26,14 @@ func NewHandler(s Service) *Handler {
 //	@Description	Create a new dashboard user with the provided details.
 //	@Tags			Dashboard User
 //	@Security		BearerAuth
-//	@Param			Authorization	header		string						true	"Bearer {token}"
+//	@Security		AppAuth
 //	@Accept			json
 //	@Produce		json
 //	@Param			dashboardUser	body		dto.CreateDTO						true	"Dashboard User Create DTO"
 //	@Success		201				{object}	docsResponse.DashboardUserCreate201	"Dashboard User Created"
 //	@Failure		400				{object}	docsResponse.DashboardUserCreate400	"Bad Request or Validation Error"
+//	@Failure		401				{object}	docsResponse.Response401			"Unauthorized"
+//	@Failure		403				{object}	docsResponse.Response403			"Forbidden - Invalid X-AUTH-APP"
 //	@Failure		500				{object}	docsResponse.Response500			"Server Error"
 //	@Router			/api/v1/dashboard-user/create [post]
 func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {

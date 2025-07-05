@@ -20,6 +20,11 @@ const docTemplate = `{
     "paths": {
         "/api/v1/auth/dashboard/login": {
             "post": {
+                "security": [
+                    {
+                        "AppAuth": []
+                    }
+                ],
                 "description": "Authenticate dashboard user with email and password",
                 "consumes": [
                     "application/json"
@@ -61,6 +66,12 @@ const docTemplate = `{
                             "$ref": "#/definitions/docsResponse.Response401"
                         }
                     },
+                    "403": {
+                        "description": "Forbidden - Invalid X-AUTH-APP",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response403"
+                        }
+                    },
                     "500": {
                         "description": "Server Error",
                         "schema": {
@@ -72,6 +83,11 @@ const docTemplate = `{
         },
         "/api/v1/auth/dashboard/refresh-token": {
             "post": {
+                "security": [
+                    {
+                        "AppAuth": []
+                    }
+                ],
                 "description": "Refresh authentication token for dashboard user",
                 "consumes": [
                     "application/json"
@@ -113,6 +129,12 @@ const docTemplate = `{
                             "$ref": "#/definitions/docsResponse.Response401"
                         }
                     },
+                    "403": {
+                        "description": "Forbidden - Invalid X-AUTH-APP",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response403"
+                        }
+                    },
                     "500": {
                         "description": "Server Error",
                         "schema": {
@@ -124,6 +146,11 @@ const docTemplate = `{
         },
         "/api/v1/category": {
             "get": {
+                "security": [
+                    {
+                        "AppAuth": []
+                    }
+                ],
                 "description": "Retrieve all categories",
                 "produces": [
                     "application/json"
@@ -139,6 +166,12 @@ const docTemplate = `{
                             "$ref": "#/definitions/docsResponse.CategoryList200"
                         }
                     },
+                    "403": {
+                        "description": "Forbidden - Invalid X-AUTH-APP",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response403"
+                        }
+                    },
                     "500": {
                         "description": "Server error",
                         "schema": {
@@ -146,11 +179,16 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
+            }
+        },
+        "/api/v1/category/create": {
             "post": {
                 "security": [
                     {
                         "BearerAuth": []
+                    },
+                    {
+                        "AppAuth": []
                     }
                 ],
                 "description": "Create a new category",
@@ -165,13 +203,6 @@ const docTemplate = `{
                 ],
                 "summary": "Create a new category",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer {token}",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "description": "Category to create",
                         "name": "category",
@@ -195,6 +226,18 @@ const docTemplate = `{
                             "$ref": "#/definitions/docsResponse.CategoryCreate400"
                         }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Invalid X-AUTH-APP",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response403"
+                        }
+                    },
                     "500": {
                         "description": "Server Error",
                         "schema": {
@@ -206,6 +249,11 @@ const docTemplate = `{
         },
         "/api/v1/category/{id}": {
             "get": {
+                "security": [
+                    {
+                        "AppAuth": []
+                    }
+                ],
                 "description": "Retrieve category by its ID",
                 "produces": [
                     "application/json"
@@ -236,6 +284,12 @@ const docTemplate = `{
                             "$ref": "#/definitions/docsResponse.Response400"
                         }
                     },
+                    "403": {
+                        "description": "Forbidden - Invalid X-AUTH-APP",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response403"
+                        }
+                    },
                     "404": {
                         "description": "Category not found",
                         "schema": {
@@ -249,11 +303,89 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
+            }
+        },
+        "/api/v1/category/{id}/delete": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    },
+                    {
+                        "AppAuth": []
+                    }
+                ],
+                "description": "Delete category by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Delete category",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Category deleted",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.CategoryDelete200"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Invalid X-AUTH-APP",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response403"
+                        }
+                    },
+                    "404": {
+                        "description": "Category not found",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response404"
+                        }
+                    },
+                    "409": {
+                        "description": "Category has linked entities",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response409"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response500"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/category/{id}/update": {
             "put": {
                 "security": [
                     {
                         "BearerAuth": []
+                    },
+                    {
+                        "AppAuth": []
                     }
                 ],
                 "description": "Update category by ID",
@@ -268,13 +400,6 @@ const docTemplate = `{
                 ],
                 "summary": "Update category",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer {token}",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "type": "integer",
                         "description": "Category ID",
@@ -305,67 +430,16 @@ const docTemplate = `{
                             "$ref": "#/definitions/docsResponse.CategoryUpdate400"
                         }
                     },
-                    "500": {
-                        "description": "Server error",
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/docsResponse.Response500"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Delete category by ID",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Category"
-                ],
-                "summary": "Delete category",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer {token}",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Category ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Category deleted",
-                        "schema": {
-                            "$ref": "#/definitions/docsResponse.CategoryDelete200"
+                            "$ref": "#/definitions/docsResponse.Response401"
                         }
                     },
-                    "400": {
-                        "description": "Invalid ID",
+                    "403": {
+                        "description": "Forbidden - Invalid X-AUTH-APP",
                         "schema": {
-                            "$ref": "#/definitions/docsResponse.Response400"
-                        }
-                    },
-                    "404": {
-                        "description": "Category not found",
-                        "schema": {
-                            "$ref": "#/definitions/docsResponse.Response404"
-                        }
-                    },
-                    "409": {
-                        "description": "Category has linked entities",
-                        "schema": {
-                            "$ref": "#/definitions/docsResponse.Response409"
+                            "$ref": "#/definitions/docsResponse.Response403"
                         }
                     },
                     "500": {
@@ -382,6 +456,9 @@ const docTemplate = `{
                 "security": [
                     {
                         "BearerAuth": []
+                    },
+                    {
+                        "AppAuth": []
                     }
                 ],
                 "description": "Create a new dashboard user with the provided details.",
@@ -396,13 +473,6 @@ const docTemplate = `{
                 ],
                 "summary": "Create a new dashboard user",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer {token}",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "description": "Dashboard User Create DTO",
                         "name": "dashboardUser",
@@ -426,6 +496,18 @@ const docTemplate = `{
                             "$ref": "#/definitions/docsResponse.DashboardUserCreate400"
                         }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Invalid X-AUTH-APP",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response403"
+                        }
+                    },
                     "500": {
                         "description": "Server Error",
                         "schema": {
@@ -440,6 +522,9 @@ const docTemplate = `{
                 "security": [
                     {
                         "BearerAuth": []
+                    },
+                    {
+                        "AppAuth": []
                     }
                 ],
                 "description": "Upload one or more images with a specific imageType. Requires JWT authentication.",
@@ -454,13 +539,6 @@ const docTemplate = `{
                 ],
                 "summary": "Upload images",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer {token}",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "type": "string",
                         "description": "Type of image (e.g. category)",
@@ -496,6 +574,12 @@ const docTemplate = `{
                         "description": "Unauthorized",
                         "schema": {
                             "$ref": "#/definitions/docsResponse.Response401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Invalid X-AUTH-APP",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response403"
                         }
                     },
                     "413": {
@@ -811,6 +895,25 @@ const docTemplate = `{
                 "message": {
                     "type": "string",
                     "example": "Unauthorized"
+                }
+            }
+        },
+        "docsResponse.Response403": {
+            "type": "object",
+            "properties": {
+                "errorCode": {
+                    "type": "string",
+                    "enum": [
+                        "FORBIDDEN"
+                    ]
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Forbidden"
                 }
             }
         },
@@ -1216,6 +1319,12 @@ const docTemplate = `{
         }
     },
     "securityDefinitions": {
+        "AppAuth": {
+            "description": "Ключ аутентификации приложения из AUTH_APP_KEY",
+            "type": "apiKey",
+            "name": "X-AUTH-APP",
+            "in": "header"
+        },
         "BearerAuth": {
             "description": "Введите токен в формате: Bearer {token}",
             "type": "apiKey",
@@ -1228,8 +1337,8 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "https://{host}:{port}",
-	BasePath:         "/api/v1",
+	Host:             "",
+	BasePath:         "",
 	Schemes:          []string{"http", "https"},
 	Title:            "Hair Company Shop API",
 	Description:      "REST API для магазина бренда Hair Company",

@@ -20,17 +20,19 @@ func NewHandler(s Service) *Handler {
 	}
 }
 
-//	@Summary		Dashboard user login
-//	@Description	Authenticate dashboard user with email and password
-//	@Tags			Auth
-//	@Accept			json
-//	@Produce		json
-//	@Param			credentials	body		dto.DashboardLoginDTO			true	"Login credentials"
-//	@Success		200			{object}	docsResponse.DashboardLogin200	"Login successful"
-//	@Failure		400			{object}	docsResponse.DashboardLogin400	"Bad Request or Validation Error"
-//	@Failure		401			{object}	docsResponse.Response401		"Unauthorized"
-//	@Failure		500			{object}	docsResponse.Response500		"Server Error"
-//	@Router			/api/v1/auth/dashboard/login [post]
+// @Summary		Dashboard user login
+// @Description	Authenticate dashboard user with email and password
+// @Tags			Auth
+// @Security		AppAuth
+// @Accept			json
+// @Produce		json
+// @Param			credentials	body		dto.DashboardLoginDTO			true	"Login credentials"
+// @Success		200			{object}	docsResponse.DashboardLogin200	"Login successful"
+// @Failure		400			{object}	docsResponse.DashboardLogin400	"Bad Request or Validation Error"
+// @Failure		401			{object}	docsResponse.Response401		"Unauthorized"
+// @Failure		403			{object}	docsResponse.Response403		"Forbidden - Invalid X-AUTH-APP"
+// @Failure		500			{object}	docsResponse.Response500		"Server Error"
+// @Router			/api/v1/auth/dashboard/login [post]
 func (h *Handler) DashboardLogin(w http.ResponseWriter, r *http.Request) {
 	dashboardLoginDto, err := request.DecodeBody[dto.DashboardLoginDTO](r.Body)
 	if err != nil {
@@ -61,17 +63,19 @@ func (h *Handler) DashboardLogin(w http.ResponseWriter, r *http.Request) {
 	response.SendSuccess(w, http.StatusOK, authData)
 }
 
-//	@Summary		Dashboard refresh token
-//	@Description	Refresh authentication token for dashboard user
-//	@Tags			Auth
-//	@Accept			json
-//	@Produce		json
-//	@Param			refreshToken	body		dto.RefreshTokenDTO						true	"Refresh token"
-//	@Success		200				{object}	docsResponse.DashboardRefreshToken200	"Token refreshed successfully"
-//	@Failure		400				{object}	docsResponse.DashboardRefreshToken400	"Bad Request or Validation Error"
-//	@Failure		401				{object}	docsResponse.Response401				"Unauthorized or Invalid Token"
-//	@Failure		500				{object}	docsResponse.Response500				"Server Error"
-//	@Router			/api/v1/auth/dashboard/refresh-token [post]
+// @Summary		Dashboard refresh token
+// @Description	Refresh authentication token for dashboard user
+// @Tags			Auth
+// @Security		AppAuth
+// @Accept			json
+// @Produce		json
+// @Param			refreshToken	body		dto.RefreshTokenDTO						true	"Refresh token"
+// @Success		200				{object}	docsResponse.DashboardRefreshToken200	"Token refreshed successfully"
+// @Failure		400				{object}	docsResponse.DashboardRefreshToken400	"Bad Request or Validation Error"
+// @Failure		401				{object}	docsResponse.Response401				"Unauthorized or Invalid Token"
+// @Failure		403				{object}	docsResponse.Response403				"Forbidden - Invalid X-AUTH-APP"
+// @Failure		500				{object}	docsResponse.Response500				"Server Error"
+// @Router			/api/v1/auth/dashboard/refresh-token [post]
 func (h *Handler) DashboardRefreshToken(w http.ResponseWriter, r *http.Request) {
 	refreshTokenDto, err := request.DecodeBody[dto.RefreshTokenDTO](r.Body)
 	if err != nil {

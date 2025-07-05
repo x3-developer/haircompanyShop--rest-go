@@ -18,6 +18,12 @@ type Response401 struct {
 	ErrorCode string `json:"errorCode" enums:"UNAUTHORIZED"`
 }
 
+type Response403 struct {
+	IsSuccess bool   `json:"isSuccess" example:"false"`
+	Message   string `json:"message" example:"Forbidden"`
+	ErrorCode string `json:"errorCode" enums:"FORBIDDEN"`
+}
+
 type Response404 struct {
 	IsSuccess bool   `json:"isSuccess" example:"false"`
 	Message   string `json:"message" example:"Resource not found"`

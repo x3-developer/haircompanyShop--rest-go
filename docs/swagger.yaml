@@ -1,4 +1,3 @@
-basePath: /api/v1
 definitions:
   docsResponse.CategoryCreate201:
     properties:
@@ -200,6 +199,19 @@ definitions:
         type: boolean
       message:
         example: Unauthorized
+        type: string
+    type: object
+  docsResponse.Response403:
+    properties:
+      errorCode:
+        enum:
+        - FORBIDDEN
+        type: string
+      isSuccess:
+        example: false
+        type: boolean
+      message:
+        example: Forbidden
         type: string
     type: object
   docsResponse.Response404:
@@ -480,7 +492,6 @@ definitions:
       image:
         type: string
     type: object
-host: https://{host}:{port}
 info:
   contact:
     email: x3.na.tri@gmail.com
@@ -516,10 +527,16 @@ paths:
           description: Unauthorized
           schema:
             $ref: '#/definitions/docsResponse.Response401'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
         "500":
           description: Server Error
           schema:
             $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - AppAuth: []
       summary: Dashboard user login
       tags:
       - Auth
@@ -550,10 +567,16 @@ paths:
           description: Unauthorized or Invalid Token
           schema:
             $ref: '#/definitions/docsResponse.Response401'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
         "500":
           description: Server Error
           schema:
             $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - AppAuth: []
       summary: Dashboard refresh token
       tags:
       - Auth
@@ -567,91 +590,20 @@ paths:
           description: List of categories
           schema:
             $ref: '#/definitions/docsResponse.CategoryList200'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
         "500":
           description: Server error
           schema:
             $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - AppAuth: []
       summary: Get all categories
       tags:
       - Category
-    post:
-      consumes:
-      - application/json
-      description: Create a new category
-      parameters:
-      - description: Bearer {token}
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: Category to create
-        in: body
-        name: category
-        required: true
-        schema:
-          $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_category_dto.CreateDTO'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Category created successfully
-          schema:
-            $ref: '#/definitions/docsResponse.CategoryCreate201'
-        "400":
-          description: Bad Request or Validation Error
-          schema:
-            $ref: '#/definitions/docsResponse.CategoryCreate400'
-        "500":
-          description: Server Error
-          schema:
-            $ref: '#/definitions/docsResponse.Response500'
-      security:
-      - BearerAuth: []
-      summary: Create a new category
-      tags:
-      - Category
   /api/v1/category/{id}:
-    delete:
-      description: Delete category by ID
-      parameters:
-      - description: Bearer {token}
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: Category ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Category deleted
-          schema:
-            $ref: '#/definitions/docsResponse.CategoryDelete200'
-        "400":
-          description: Invalid ID
-          schema:
-            $ref: '#/definitions/docsResponse.Response400'
-        "404":
-          description: Category not found
-          schema:
-            $ref: '#/definitions/docsResponse.Response404'
-        "409":
-          description: Category has linked entities
-          schema:
-            $ref: '#/definitions/docsResponse.Response409'
-        "500":
-          description: Server error
-          schema:
-            $ref: '#/definitions/docsResponse.Response500'
-      security:
-      - BearerAuth: []
-      summary: Delete category
-      tags:
-      - Category
     get:
       description: Retrieve category by its ID
       parameters:
@@ -671,6 +623,10 @@ paths:
           description: Invalid ID
           schema:
             $ref: '#/definitions/docsResponse.Response400'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
         "404":
           description: Category not found
           schema:
@@ -679,19 +635,63 @@ paths:
           description: Server error
           schema:
             $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - AppAuth: []
       summary: Get category by ID
       tags:
       - Category
+  /api/v1/category/{id}/delete:
+    delete:
+      description: Delete category by ID
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Category deleted
+          schema:
+            $ref: '#/definitions/docsResponse.CategoryDelete200'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/docsResponse.Response400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docsResponse.Response401'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
+        "404":
+          description: Category not found
+          schema:
+            $ref: '#/definitions/docsResponse.Response404'
+        "409":
+          description: Category has linked entities
+          schema:
+            $ref: '#/definitions/docsResponse.Response409'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - BearerAuth: []
+      - AppAuth: []
+      summary: Delete category
+      tags:
+      - Category
+  /api/v1/category/{id}/update:
     put:
       consumes:
       - application/json
       description: Update category by ID
       parameters:
-      - description: Bearer {token}
-        in: header
-        name: Authorization
-        required: true
-        type: string
       - description: Category ID
         in: path
         name: id
@@ -714,13 +714,63 @@ paths:
           description: Bad request or validation error
           schema:
             $ref: '#/definitions/docsResponse.CategoryUpdate400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docsResponse.Response401'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
         "500":
           description: Server error
           schema:
             $ref: '#/definitions/docsResponse.Response500'
       security:
       - BearerAuth: []
+      - AppAuth: []
       summary: Update category
+      tags:
+      - Category
+  /api/v1/category/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new category
+      parameters:
+      - description: Category to create
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_category_dto.CreateDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Category created successfully
+          schema:
+            $ref: '#/definitions/docsResponse.CategoryCreate201'
+        "400":
+          description: Bad Request or Validation Error
+          schema:
+            $ref: '#/definitions/docsResponse.CategoryCreate400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docsResponse.Response401'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
+        "500":
+          description: Server Error
+          schema:
+            $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - BearerAuth: []
+      - AppAuth: []
+      summary: Create a new category
       tags:
       - Category
   /api/v1/dashboard-user/create:
@@ -729,11 +779,6 @@ paths:
       - application/json
       description: Create a new dashboard user with the provided details.
       parameters:
-      - description: Bearer {token}
-        in: header
-        name: Authorization
-        required: true
-        type: string
       - description: Dashboard User Create DTO
         in: body
         name: dashboardUser
@@ -751,12 +796,21 @@ paths:
           description: Bad Request or Validation Error
           schema:
             $ref: '#/definitions/docsResponse.DashboardUserCreate400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docsResponse.Response401'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
         "500":
           description: Server Error
           schema:
             $ref: '#/definitions/docsResponse.Response500'
       security:
       - BearerAuth: []
+      - AppAuth: []
       summary: Create a new dashboard user
       tags:
       - Dashboard User
@@ -767,11 +821,6 @@ paths:
       description: Upload one or more images with a specific imageType. Requires JWT
         authentication.
       parameters:
-      - description: Bearer {token}
-        in: header
-        name: Authorization
-        required: true
-        type: string
       - description: Type of image (e.g. category)
         in: formData
         name: imageType
@@ -799,6 +848,10 @@ paths:
           description: Unauthorized
           schema:
             $ref: '#/definitions/docsResponse.Response401'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
         "413":
           description: File too large
           schema:
@@ -809,6 +862,7 @@ paths:
             $ref: '#/definitions/docsResponse.Response500'
       security:
       - BearerAuth: []
+      - AppAuth: []
       summary: Upload images
       tags:
       - Image
@@ -816,6 +870,11 @@ schemes:
 - http
 - https
 securityDefinitions:
+  AppAuth:
+    description: Ключ аутентификации приложения из AUTH_APP_KEY
+    in: header
+    name: X-AUTH-APP
+    type: apiKey
   BearerAuth:
     description: 'Введите токен в формате: Bearer {token}'
     in: header
