@@ -175,6 +175,82 @@ definitions:
         example: Bad request or validation error
         type: string
     type: object
+  docsResponse.LineCreate201:
+    properties:
+      data:
+        $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_line_dto.ResponseDTO'
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.LineCreate400:
+    properties:
+      errorCode:
+        enum:
+        - BAD_REQUEST
+        type: string
+      fields:
+        items:
+          $ref: '#/definitions/docsResponse.categoryErrorField'
+        type: array
+      isSuccess:
+        example: false
+        type: boolean
+      message:
+        example: Bad request or validation error
+        type: string
+    type: object
+  docsResponse.LineDelete200:
+    properties:
+      data:
+        $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_line_dto.ResponseDTO'
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.LineGetById200:
+    properties:
+      data:
+        $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_line_dto.ResponseDTO'
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.LineList200:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_line_dto.ResponseDTO'
+        type: array
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.LineUpdate200:
+    properties:
+      data:
+        $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_line_dto.ResponseDTO'
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.LineUpdate400:
+    properties:
+      errorCode:
+        enum:
+        - BAD_REQUEST
+        type: string
+      fields:
+        items:
+          $ref: '#/definitions/docsResponse.categoryErrorField'
+        type: array
+      isSuccess:
+        example: false
+        type: boolean
+      message:
+        example: Bad request or validation error
+        type: string
+    type: object
   docsResponse.Response400:
     properties:
       errorCode:
@@ -339,42 +415,6 @@ definitions:
     required:
     - refreshToken
     type: object
-  dto.UpdateDTO:
-    properties:
-      description:
-        type: string
-      headerImage:
-        type: string
-      image:
-        type: string
-      isActive:
-        type: boolean
-      isShade:
-        type: boolean
-      isVisibleInMenu:
-        type: boolean
-      isVisibleOnMain:
-        type: boolean
-      name:
-        maxLength: 255
-        minLength: 3
-        type: string
-      parentId:
-        type: integer
-      seoDescription:
-        type: string
-      seoKeys:
-        type: string
-      seoTitle:
-        type: string
-      slug:
-        maxLength: 255
-        minLength: 3
-        type: string
-      sortIndex:
-        minimum: 0
-        type: integer
-    type: object
   haircompany-shop-rest_internal_modules_v1_auth_dto.ResponseDTO:
     properties:
       refreshExpiresAt:
@@ -469,6 +509,42 @@ definitions:
       updatedAt:
         type: string
     type: object
+  haircompany-shop-rest_internal_modules_v1_category_dto.UpdateDTO:
+    properties:
+      description:
+        type: string
+      headerImage:
+        type: string
+      image:
+        type: string
+      isActive:
+        type: boolean
+      isShade:
+        type: boolean
+      isVisibleInMenu:
+        type: boolean
+      isVisibleOnMain:
+        type: boolean
+      name:
+        maxLength: 255
+        minLength: 3
+        type: string
+      parentId:
+        type: integer
+      seoDescription:
+        type: string
+      seoKeys:
+        type: string
+      seoTitle:
+        type: string
+      slug:
+        maxLength: 255
+        minLength: 3
+        type: string
+      sortIndex:
+        minimum: 0
+        type: integer
+    type: object
   haircompany-shop-rest_internal_modules_v1_dashboard_user_dto.CreateDTO:
     properties:
       email:
@@ -490,6 +566,46 @@ definitions:
   haircompany-shop-rest_internal_modules_v1_image_dto.ResponseDTO:
     properties:
       image:
+        type: string
+    type: object
+  haircompany-shop-rest_internal_modules_v1_line_dto.CreateDTO:
+    properties:
+      color:
+        example: '#FF5733'
+        type: string
+      name:
+        maxLength: 255
+        minLength: 3
+        type: string
+    required:
+    - color
+    - name
+    type: object
+  haircompany-shop-rest_internal_modules_v1_line_dto.ResponseDTO:
+    properties:
+      color:
+        example: '#FF5733'
+        type: string
+      createdAt:
+        example: "2023-10-01T12:00:00Z"
+        type: string
+      id:
+        example: 1
+        type: integer
+      name:
+        example: Line Name
+        type: string
+      updatedAt:
+        example: "2023-10-01T12:00:00Z"
+        type: string
+    type: object
+  haircompany-shop-rest_internal_modules_v1_line_dto.UpdateDTO:
+    properties:
+      color:
+        type: string
+      name:
+        maxLength: 255
+        minLength: 3
         type: string
     type: object
 info:
@@ -702,7 +818,7 @@ paths:
         name: category
         required: true
         schema:
-          $ref: '#/definitions/dto.UpdateDTO'
+          $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_category_dto.UpdateDTO'
       produces:
       - application/json
       responses:
@@ -866,6 +982,199 @@ paths:
       summary: Upload images
       tags:
       - Image
+  /api/v1/line:
+    get:
+      description: Retrieve all lines
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of lines
+          schema:
+            $ref: '#/definitions/docsResponse.LineList200'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - AppAuth: []
+      summary: Get all lines
+      tags:
+      - Line
+  /api/v1/line/{id}:
+    get:
+      description: Retrieve line by its ID
+      parameters:
+      - description: Line ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Line found
+          schema:
+            $ref: '#/definitions/docsResponse.LineGetById200'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/docsResponse.Response400'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
+        "404":
+          description: Line not found
+          schema:
+            $ref: '#/definitions/docsResponse.Response404'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - AppAuth: []
+      summary: Get line by ID
+      tags:
+      - Line
+  /api/v1/line/{id}/delete:
+    delete:
+      description: Delete line by ID
+      parameters:
+      - description: Line ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Line deleted
+          schema:
+            $ref: '#/definitions/docsResponse.LineDelete200'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/docsResponse.Response400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docsResponse.Response401'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
+        "404":
+          description: Line not found
+          schema:
+            $ref: '#/definitions/docsResponse.Response404'
+        "409":
+          description: Line has linked entities
+          schema:
+            $ref: '#/definitions/docsResponse.Response409'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - BearerAuth: []
+      - AppAuth: []
+      summary: Delete line
+      tags:
+      - Line
+  /api/v1/line/{id}/update:
+    put:
+      consumes:
+      - application/json
+      description: Update line by ID
+      parameters:
+      - description: Line ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Line update payload
+        in: body
+        name: line
+        required: true
+        schema:
+          $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_line_dto.UpdateDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Line updated
+          schema:
+            $ref: '#/definitions/docsResponse.LineUpdate200'
+        "400":
+          description: Bad request or validation error
+          schema:
+            $ref: '#/definitions/docsResponse.LineUpdate400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docsResponse.Response401'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - BearerAuth: []
+      - AppAuth: []
+      summary: Update line
+      tags:
+      - Line
+  /api/v1/line/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new line
+      parameters:
+      - description: Line to create
+        in: body
+        name: line
+        required: true
+        schema:
+          $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_line_dto.CreateDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Line created successfully
+          schema:
+            $ref: '#/definitions/docsResponse.LineCreate201'
+        "400":
+          description: Bad Request or Validation Error
+          schema:
+            $ref: '#/definitions/docsResponse.LineCreate400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docsResponse.Response401'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
+        "500":
+          description: Server Error
+          schema:
+            $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - BearerAuth: []
+      - AppAuth: []
+      summary: Create a new line
+      tags:
+      - Line
 schemes:
 - http
 - https

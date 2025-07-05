@@ -27,6 +27,8 @@ func GetErrorCodeByTag(tag string) ErrorCode {
 		return MinLength
 	case "max":
 		return MaxLength
+	case "hex_color":
+		return BadRequest
 	default:
 		return ServerError
 	}

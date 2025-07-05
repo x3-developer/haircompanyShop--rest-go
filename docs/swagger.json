@@ -409,7 +409,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.UpdateDTO"
+                            "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_category_dto.UpdateDTO"
                         }
                     }
                 ],
@@ -586,6 +586,313 @@
                     },
                     "500": {
                         "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response500"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/line": {
+            "get": {
+                "security": [
+                    {
+                        "AppAuth": []
+                    }
+                ],
+                "description": "Retrieve all lines",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Line"
+                ],
+                "summary": "Get all lines",
+                "responses": {
+                    "200": {
+                        "description": "List of lines",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.LineList200"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Invalid X-AUTH-APP",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response403"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response500"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/line/create": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    },
+                    {
+                        "AppAuth": []
+                    }
+                ],
+                "description": "Create a new line",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Line"
+                ],
+                "summary": "Create a new line",
+                "parameters": [
+                    {
+                        "description": "Line to create",
+                        "name": "line",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_line_dto.CreateDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Line created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.LineCreate201"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request or Validation Error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.LineCreate400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Invalid X-AUTH-APP",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response403"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response500"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/line/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "AppAuth": []
+                    }
+                ],
+                "description": "Retrieve line by its ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Line"
+                ],
+                "summary": "Get line by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Line ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Line found",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.LineGetById200"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response400"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Invalid X-AUTH-APP",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response403"
+                        }
+                    },
+                    "404": {
+                        "description": "Line not found",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response404"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response500"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/line/{id}/delete": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    },
+                    {
+                        "AppAuth": []
+                    }
+                ],
+                "description": "Delete line by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Line"
+                ],
+                "summary": "Delete line",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Line ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Line deleted",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.LineDelete200"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Invalid X-AUTH-APP",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response403"
+                        }
+                    },
+                    "404": {
+                        "description": "Line not found",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response404"
+                        }
+                    },
+                    "409": {
+                        "description": "Line has linked entities",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response409"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response500"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/line/{id}/update": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    },
+                    {
+                        "AppAuth": []
+                    }
+                ],
+                "description": "Update line by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Line"
+                ],
+                "summary": "Update line",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Line ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Line update payload",
+                        "name": "line",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_line_dto.UpdateDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Line updated",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.LineUpdate200"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request or validation error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.LineUpdate400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Invalid X-AUTH-APP",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response403"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
                         "schema": {
                             "$ref": "#/definitions/docsResponse.Response500"
                         }
@@ -856,6 +1163,119 @@
                 }
             }
         },
+        "docsResponse.LineCreate201": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_line_dto.ResponseDTO"
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "docsResponse.LineCreate400": {
+            "type": "object",
+            "properties": {
+                "errorCode": {
+                    "type": "string",
+                    "enum": [
+                        "BAD_REQUEST"
+                    ]
+                },
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/docsResponse.categoryErrorField"
+                    }
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Bad request or validation error"
+                }
+            }
+        },
+        "docsResponse.LineDelete200": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_line_dto.ResponseDTO"
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "docsResponse.LineGetById200": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_line_dto.ResponseDTO"
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "docsResponse.LineList200": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_line_dto.ResponseDTO"
+                    }
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "docsResponse.LineUpdate200": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_line_dto.ResponseDTO"
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "docsResponse.LineUpdate400": {
+            "type": "object",
+            "properties": {
+                "errorCode": {
+                    "type": "string",
+                    "enum": [
+                        "BAD_REQUEST"
+                    ]
+                },
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/docsResponse.categoryErrorField"
+                    }
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Bad request or validation error"
+                }
+            }
+        },
         "docsResponse.Response400": {
             "type": "object",
             "properties": {
@@ -1093,58 +1513,6 @@
                 }
             }
         },
-        "dto.UpdateDTO": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "headerImage": {
-                    "type": "string"
-                },
-                "image": {
-                    "type": "string"
-                },
-                "isActive": {
-                    "type": "boolean"
-                },
-                "isShade": {
-                    "type": "boolean"
-                },
-                "isVisibleInMenu": {
-                    "type": "boolean"
-                },
-                "isVisibleOnMain": {
-                    "type": "boolean"
-                },
-                "name": {
-                    "type": "string",
-                    "maxLength": 255,
-                    "minLength": 3
-                },
-                "parentId": {
-                    "type": "integer"
-                },
-                "seoDescription": {
-                    "type": "string"
-                },
-                "seoKeys": {
-                    "type": "string"
-                },
-                "seoTitle": {
-                    "type": "string"
-                },
-                "slug": {
-                    "type": "string",
-                    "maxLength": 255,
-                    "minLength": 3
-                },
-                "sortIndex": {
-                    "type": "integer",
-                    "minimum": 0
-                }
-            }
-        },
         "haircompany-shop-rest_internal_modules_v1_auth_dto.ResponseDTO": {
             "type": "object",
             "properties": {
@@ -1280,6 +1648,58 @@
                 }
             }
         },
+        "haircompany-shop-rest_internal_modules_v1_category_dto.UpdateDTO": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "headerImage": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "isShade": {
+                    "type": "boolean"
+                },
+                "isVisibleInMenu": {
+                    "type": "boolean"
+                },
+                "isVisibleOnMain": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 3
+                },
+                "parentId": {
+                    "type": "integer"
+                },
+                "seoDescription": {
+                    "type": "string"
+                },
+                "seoKeys": {
+                    "type": "string"
+                },
+                "seoTitle": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 3
+                },
+                "sortIndex": {
+                    "type": "integer",
+                    "minimum": 0
+                }
+            }
+        },
         "haircompany-shop-rest_internal_modules_v1_dashboard_user_dto.CreateDTO": {
             "type": "object",
             "required": [
@@ -1310,6 +1730,62 @@
             "properties": {
                 "image": {
                     "type": "string"
+                }
+            }
+        },
+        "haircompany-shop-rest_internal_modules_v1_line_dto.CreateDTO": {
+            "type": "object",
+            "required": [
+                "color",
+                "name"
+            ],
+            "properties": {
+                "color": {
+                    "type": "string",
+                    "example": "#FF5733"
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 3
+                }
+            }
+        },
+        "haircompany-shop-rest_internal_modules_v1_line_dto.ResponseDTO": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string",
+                    "example": "#FF5733"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "example": "2023-10-01T12:00:00Z"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Line Name"
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "example": "2023-10-01T12:00:00Z"
+                }
+            }
+        },
+        "haircompany-shop-rest_internal_modules_v1_line_dto.UpdateDTO": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 3
                 }
             }
         }
