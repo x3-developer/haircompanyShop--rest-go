@@ -45,14 +45,19 @@ REST API для магазина бренда Hair Company, разработан
    ```bash
    cp .env.example .env.local # или .env.production.local - для production
    ```
-   Отредактируйте файл `.env` с вашими настройками.
+   Отредактируйте файл `.env*` с вашими настройками.
 
 4. **Запуск миграций**
    ```bash
-   go run migrations/auto.go
+   go run migrations/auto.go up
+   ```
+   
+5. **Откат миграций (при необходимости)**
+   ```bash
+   go run migrations/auto.go down
    ```
 
-5. **Запуск приложения**
+6. **Запуск приложения**
    ```bash
    go run cmd/main.go
    ```
