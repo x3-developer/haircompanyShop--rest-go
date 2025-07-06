@@ -19,8 +19,6 @@ type FileSystemService interface {
 	CleanTemp()
 	MoveToPermanent(filenames []string, folder string) error
 	Delete(filenames []string, folder string) error
-	getPermanentPath(folder string) string
-	getNewFileName(filename string) (string, error)
 }
 
 type fileSystemService struct{}

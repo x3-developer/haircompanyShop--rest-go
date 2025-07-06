@@ -50,17 +50,13 @@ func (r *repository) GetAll() ([]*model.Category, error) {
 
 func (r *repository) GetById(id uint) (*model.Category, error) {
 	var category *model.Category
-	var err error
 
 	result := r.DB.First(&category, id)
 	if result.Error != nil {
-		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			return nil, nil
-		}
-		err = result.Error
+		return nil, result.Error
 	}
 
-	return category, err
+	return category, nil
 }
 
 func (r *repository) Update(model *model.Category) (*model.Category, error) {
