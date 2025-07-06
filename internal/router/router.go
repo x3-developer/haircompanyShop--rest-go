@@ -9,6 +9,7 @@ import (
 	"haircompany-shop-rest/internal/modules/v1/auth"
 	"haircompany-shop-rest/internal/modules/v1/category"
 	"haircompany-shop-rest/internal/modules/v1/dashboard_user"
+	"haircompany-shop-rest/internal/modules/v1/desired_result"
 	"haircompany-shop-rest/internal/modules/v1/image"
 	"haircompany-shop-rest/internal/modules/v1/line"
 	"haircompany-shop-rest/internal/modules/v1/product_type"
@@ -25,6 +26,7 @@ func NewRouter(cfg *config.Config, container *container.Container) http.Handler 
 	dashboard_user.RegisterV1DashboardUserRoutes(v1, container)
 	line.RegisterV1LineRoutes(v1, container)
 	product_type.RegisterV1ProductTypeRoutes(v1, container)
+	desired_result.RegisterV1DesiredResultRoutes(v1, container)
 
 	apiHandler := middleware.ChainMiddleware(
 		v1,

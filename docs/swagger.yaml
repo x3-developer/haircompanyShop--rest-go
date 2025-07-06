@@ -150,6 +150,82 @@ definitions:
         example: Bad request or validation error
         type: string
     type: object
+  docsResponse.DesiredResultCreate201:
+    properties:
+      data:
+        $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_desired_result_dto.ResponseDTO'
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.DesiredResultCreate400:
+    properties:
+      errorCode:
+        enum:
+        - BAD_REQUEST
+        type: string
+      fields:
+        items:
+          $ref: '#/definitions/docsResponse.categoryErrorField'
+        type: array
+      isSuccess:
+        example: false
+        type: boolean
+      message:
+        example: Bad request or validation error
+        type: string
+    type: object
+  docsResponse.DesiredResultDelete200:
+    properties:
+      data:
+        $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_desired_result_dto.ResponseDTO'
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.DesiredResultGetById200:
+    properties:
+      data:
+        $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_desired_result_dto.ResponseDTO'
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.DesiredResultList200:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_desired_result_dto.ResponseDTO'
+        type: array
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.DesiredResultUpdate200:
+    properties:
+      data:
+        $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_desired_result_dto.ResponseDTO'
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.DesiredResultUpdate400:
+    properties:
+      errorCode:
+        enum:
+        - BAD_REQUEST
+        type: string
+      fields:
+        items:
+          $ref: '#/definitions/docsResponse.categoryErrorField'
+        type: array
+      isSuccess:
+        example: false
+        type: boolean
+      message:
+        example: Bad request or validation error
+        type: string
+    type: object
   docsResponse.ImageUpload200:
     properties:
       data:
@@ -639,6 +715,37 @@ definitions:
     - password
     - role
     type: object
+  haircompany-shop-rest_internal_modules_v1_desired_result_dto.CreateDTO:
+    properties:
+      name:
+        maxLength: 255
+        minLength: 3
+        type: string
+    required:
+    - name
+    type: object
+  haircompany-shop-rest_internal_modules_v1_desired_result_dto.ResponseDTO:
+    properties:
+      createdAt:
+        example: "2023-10-01T12:00:00Z"
+        type: string
+      id:
+        example: 1
+        type: integer
+      name:
+        example: Product type Name
+        type: string
+      updatedAt:
+        example: "2023-10-01T12:00:00Z"
+        type: string
+    type: object
+  haircompany-shop-rest_internal_modules_v1_desired_result_dto.UpdateDTO:
+    properties:
+      name:
+        maxLength: 255
+        minLength: 3
+        type: string
+    type: object
   haircompany-shop-rest_internal_modules_v1_image_dto.ResponseDTO:
     properties:
       image:
@@ -1037,6 +1144,199 @@ paths:
       summary: Create a new dashboard user
       tags:
       - Dashboard User
+  /api/v1/desired-result:
+    get:
+      description: Retrieve all desiredResults
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of desiredResults
+          schema:
+            $ref: '#/definitions/docsResponse.DesiredResultList200'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - AppAuth: []
+      summary: Get all desiredResults
+      tags:
+      - DesiredResult
+  /api/v1/desired-result/{id}:
+    get:
+      description: Retrieve desiredResult by its ID
+      parameters:
+      - description: DesiredResult ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: DesiredResult found
+          schema:
+            $ref: '#/definitions/docsResponse.DesiredResultGetById200'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/docsResponse.Response400'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
+        "404":
+          description: DesiredResult not found
+          schema:
+            $ref: '#/definitions/docsResponse.Response404'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - AppAuth: []
+      summary: Get desiredResult by ID
+      tags:
+      - DesiredResult
+  /api/v1/desired-result/{id}/delete:
+    delete:
+      description: Delete desiredResult by ID
+      parameters:
+      - description: DesiredResult ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: DesiredResult deleted
+          schema:
+            $ref: '#/definitions/docsResponse.DesiredResultDelete200'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/docsResponse.Response400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docsResponse.Response401'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
+        "404":
+          description: DesiredResult not found
+          schema:
+            $ref: '#/definitions/docsResponse.Response404'
+        "409":
+          description: DesiredResult has linked entities
+          schema:
+            $ref: '#/definitions/docsResponse.Response409'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - BearerAuth: []
+      - AppAuth: []
+      summary: Delete desiredResult
+      tags:
+      - DesiredResult
+  /api/v1/desired-result/{id}/update:
+    put:
+      consumes:
+      - application/json
+      description: Update desiredResult by ID
+      parameters:
+      - description: DesiredResult ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: DesiredResult update payload
+        in: body
+        name: desiredResult
+        required: true
+        schema:
+          $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_desired_result_dto.UpdateDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: DesiredResult updated
+          schema:
+            $ref: '#/definitions/docsResponse.DesiredResultUpdate200'
+        "400":
+          description: Bad request or validation error
+          schema:
+            $ref: '#/definitions/docsResponse.DesiredResultUpdate400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docsResponse.Response401'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - BearerAuth: []
+      - AppAuth: []
+      summary: Update desiredResult
+      tags:
+      - DesiredResult
+  /api/v1/desired-result/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new desiredResult
+      parameters:
+      - description: DesiredResult to create
+        in: body
+        name: desiredResult
+        required: true
+        schema:
+          $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_desired_result_dto.CreateDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: DesiredResult created successfully
+          schema:
+            $ref: '#/definitions/docsResponse.DesiredResultCreate201'
+        "400":
+          description: Bad Request or Validation Error
+          schema:
+            $ref: '#/definitions/docsResponse.DesiredResultCreate400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docsResponse.Response401'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
+        "500":
+          description: Server Error
+          schema:
+            $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - BearerAuth: []
+      - AppAuth: []
+      summary: Create a new desiredResult
+      tags:
+      - DesiredResult
   /api/v1/image/upload:
     post:
       consumes:
