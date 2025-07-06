@@ -30,11 +30,11 @@ func NewHandler(s Service) *Handler {
 //	@Accept			json
 //	@Produce		json
 //	@Param			desiredResult	body		dto.CreateDTO						true	"DesiredResult to create"
-//	@Success		201			{object}	docsResponse.DesiredResultCreate201	"DesiredResult created successfully"
-//	@Failure		400			{object}	docsResponse.DesiredResultCreate400	"Bad Request or Validation Error"
-//	@Failure		401			{object}	docsResponse.Response401			"Unauthorized"
-//	@Failure		403			{object}	docsResponse.Response403			"Forbidden - Invalid X-AUTH-APP"
-//	@Failure		500			{object}	docsResponse.Response500			"Server Error"
+//	@Success		201				{object}	docsResponse.DesiredResultCreate201	"DesiredResult created successfully"
+//	@Failure		400				{object}	docsResponse.DesiredResultCreate400	"Bad Request or Validation Error"
+//	@Failure		401				{object}	docsResponse.Response401			"Unauthorized"
+//	@Failure		403				{object}	docsResponse.Response403			"Forbidden - Invalid X-AUTH-APP"
+//	@Failure		500				{object}	docsResponse.Response500			"Server Error"
 //	@Router			/api/v1/desired-result/create [post]
 func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 	createDto, err := request.DecodeBody[dto.CreateDTO](r.Body)
@@ -74,8 +74,8 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 //	@Security		AppAuth
 //	@Produce		json
 //	@Success		200	{object}	docsResponse.DesiredResultList200	"List of desiredResults"
-//	@Failure		403	{object}	docsResponse.Response403		"Forbidden - Invalid X-AUTH-APP"
-//	@Failure		500	{object}	docsResponse.Response500		"Server error"
+//	@Failure		403	{object}	docsResponse.Response403			"Forbidden - Invalid X-AUTH-APP"
+//	@Failure		500	{object}	docsResponse.Response500			"Server error"
 //	@Router			/api/v1/desired-result [get]
 func (h *Handler) GetAll(w http.ResponseWriter) {
 	desiredResults, err := h.svc.GetAll()
@@ -95,12 +95,12 @@ func (h *Handler) GetAll(w http.ResponseWriter) {
 //	@Tags			DesiredResult
 //	@Security		AppAuth
 //	@Produce		json
-//	@Param			id	path		int									true	"DesiredResult ID"
+//	@Param			id	path		int										true	"DesiredResult ID"
 //	@Success		200	{object}	docsResponse.DesiredResultGetById200	"DesiredResult found"
-//	@Failure		400	{object}	docsResponse.Response400			"Invalid ID"
-//	@Failure		403	{object}	docsResponse.Response403			"Forbidden - Invalid X-AUTH-APP"
-//	@Failure		404	{object}	docsResponse.Response404			"DesiredResult not found"
-//	@Failure		500	{object}	docsResponse.Response500			"Server error"
+//	@Failure		400	{object}	docsResponse.Response400				"Invalid ID"
+//	@Failure		403	{object}	docsResponse.Response403				"Forbidden - Invalid X-AUTH-APP"
+//	@Failure		404	{object}	docsResponse.Response404				"DesiredResult not found"
+//	@Failure		500	{object}	docsResponse.Response500				"Server error"
 //	@Router			/api/v1/desired-result/{id} [get]
 func (h *Handler) GetById(w http.ResponseWriter, r *http.Request) {
 	idStr := r.PathValue("id")
@@ -141,13 +141,13 @@ func (h *Handler) GetById(w http.ResponseWriter, r *http.Request) {
 //	@Security		AppAuth
 //	@Accept			json
 //	@Produce		json
-//	@Param			id			path		int									true	"DesiredResult ID"
+//	@Param			id				path		int									true	"DesiredResult ID"
 //	@Param			desiredResult	body		dto.UpdateDTO						true	"DesiredResult update payload"
-//	@Success		200			{object}	docsResponse.DesiredResultUpdate200	"DesiredResult updated"
-//	@Failure		400			{object}	docsResponse.DesiredResultUpdate400	"Bad request or validation error"
-//	@Failure		401			{object}	docsResponse.Response401			"Unauthorized"
-//	@Failure		403			{object}	docsResponse.Response403			"Forbidden - Invalid X-AUTH-APP"
-//	@Failure		500			{object}	docsResponse.Response500			"Server error"
+//	@Success		200				{object}	docsResponse.DesiredResultUpdate200	"DesiredResult updated"
+//	@Failure		400				{object}	docsResponse.DesiredResultUpdate400	"Bad request or validation error"
+//	@Failure		401				{object}	docsResponse.Response401			"Unauthorized"
+//	@Failure		403				{object}	docsResponse.Response403			"Forbidden - Invalid X-AUTH-APP"
+//	@Failure		500				{object}	docsResponse.Response500			"Server error"
 //	@Router			/api/v1/desired-result/{id}/update [put]
 func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
 	idStr := r.PathValue("id")

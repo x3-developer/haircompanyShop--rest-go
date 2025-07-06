@@ -173,7 +173,6 @@ func (c *service) Update(id uint, updateDto dto.UpdateDTO) (*dto.ResponseDTO, []
 	updatedCategoryResponse := dto.TransformModelToResponseDTO(updatedCategory)
 
 	return updatedCategoryResponse, nil, nil
-
 }
 
 func (c *service) Delete(id uint) (*dto.ResponseDTO, int64, error) {

@@ -494,6 +494,82 @@ definitions:
         example: Internal server error
         type: string
     type: object
+  docsResponse.ShadeCreate201:
+    properties:
+      data:
+        $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_shade_dto.ResponseDTO'
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.ShadeCreate400:
+    properties:
+      errorCode:
+        enum:
+        - BAD_REQUEST
+        type: string
+      fields:
+        items:
+          $ref: '#/definitions/docsResponse.categoryErrorField'
+        type: array
+      isSuccess:
+        example: false
+        type: boolean
+      message:
+        example: Bad request or validation error
+        type: string
+    type: object
+  docsResponse.ShadeDelete200:
+    properties:
+      data:
+        $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_shade_dto.ResponseDTO'
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.ShadeGetById200:
+    properties:
+      data:
+        $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_shade_dto.ResponseDTO'
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.ShadeList200:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_shade_dto.ResponseDTO'
+        type: array
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.ShadeUpdate200:
+    properties:
+      data:
+        $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_shade_dto.ResponseDTO'
+      isSuccess:
+        example: true
+        type: boolean
+    type: object
+  docsResponse.ShadeUpdate400:
+    properties:
+      errorCode:
+        enum:
+        - BAD_REQUEST
+        type: string
+      fields:
+        items:
+          $ref: '#/definitions/docsResponse.categoryErrorField'
+        type: array
+      isSuccess:
+        example: false
+        type: boolean
+      message:
+        example: Bad request or validation error
+        type: string
+    type: object
   docsResponse.authErrorField:
     properties:
       errorCode:
@@ -821,6 +897,57 @@ definitions:
         maxLength: 255
         minLength: 3
         type: string
+    type: object
+  haircompany-shop-rest_internal_modules_v1_shade_dto.CreateDTO:
+    properties:
+      image:
+        maxLength: 255
+        type: string
+      name:
+        maxLength: 255
+        minLength: 3
+        type: string
+      sortIndex:
+        maximum: 9999
+        minimum: 0
+        type: integer
+    required:
+    - image
+    - name
+    - sortIndex
+    type: object
+  haircompany-shop-rest_internal_modules_v1_shade_dto.ResponseDTO:
+    properties:
+      createdAt:
+        example: "2023-10-01T12:00:00Z"
+        type: string
+      id:
+        example: 1
+        type: integer
+      image:
+        example: shade.png
+        type: string
+      name:
+        example: Shade Name
+        type: string
+      sortIndex:
+        example: 1
+        type: integer
+      updatedAt:
+        example: "2023-10-01T12:00:00Z"
+        type: string
+    type: object
+  haircompany-shop-rest_internal_modules_v1_shade_dto.UpdateDTO:
+    properties:
+      image:
+        type: string
+      name:
+        maxLength: 255
+        minLength: 3
+        type: string
+      sort_index:
+        minimum: 0
+        type: integer
     type: object
 info:
   contact:
@@ -1775,6 +1902,199 @@ paths:
       summary: Create a new productType
       tags:
       - ProductType
+  /api/v1/shade:
+    get:
+      description: Retrieve all shades
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of shades
+          schema:
+            $ref: '#/definitions/docsResponse.ShadeList200'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - AppAuth: []
+      summary: Get all shades
+      tags:
+      - Shade
+  /api/v1/shade/{id}:
+    get:
+      description: Retrieve shade by its ID
+      parameters:
+      - description: Shade ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Shade found
+          schema:
+            $ref: '#/definitions/docsResponse.ShadeGetById200'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/docsResponse.Response400'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
+        "404":
+          description: Shade not found
+          schema:
+            $ref: '#/definitions/docsResponse.Response404'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - AppAuth: []
+      summary: Get shade by ID
+      tags:
+      - Shade
+  /api/v1/shade/{id}/delete:
+    delete:
+      description: Delete shade by ID
+      parameters:
+      - description: Shade ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Shade deleted
+          schema:
+            $ref: '#/definitions/docsResponse.ShadeDelete200'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/docsResponse.Response400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docsResponse.Response401'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
+        "404":
+          description: Shade not found
+          schema:
+            $ref: '#/definitions/docsResponse.Response404'
+        "409":
+          description: Shade has linked entities
+          schema:
+            $ref: '#/definitions/docsResponse.Response409'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - BearerAuth: []
+      - AppAuth: []
+      summary: Delete shade
+      tags:
+      - Shade
+  /api/v1/shade/{id}/update:
+    put:
+      consumes:
+      - application/json
+      description: Update shade by ID
+      parameters:
+      - description: Shade ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Shade update payload
+        in: body
+        name: shade
+        required: true
+        schema:
+          $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_shade_dto.UpdateDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Shade updated
+          schema:
+            $ref: '#/definitions/docsResponse.ShadeUpdate200'
+        "400":
+          description: Bad request or validation error
+          schema:
+            $ref: '#/definitions/docsResponse.ShadeUpdate400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docsResponse.Response401'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - BearerAuth: []
+      - AppAuth: []
+      summary: Update shade
+      tags:
+      - Shade
+  /api/v1/shade/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new shade
+      parameters:
+      - description: Shade to create
+        in: body
+        name: shade
+        required: true
+        schema:
+          $ref: '#/definitions/haircompany-shop-rest_internal_modules_v1_shade_dto.CreateDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Shade created successfully
+          schema:
+            $ref: '#/definitions/docsResponse.ShadeCreate201'
+        "400":
+          description: Bad Request or Validation Error
+          schema:
+            $ref: '#/definitions/docsResponse.ShadeCreate400'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docsResponse.Response401'
+        "403":
+          description: Forbidden - Invalid X-AUTH-APP
+          schema:
+            $ref: '#/definitions/docsResponse.Response403'
+        "500":
+          description: Server Error
+          schema:
+            $ref: '#/definitions/docsResponse.Response500'
+      security:
+      - BearerAuth: []
+      - AppAuth: []
+      summary: Create a new shade
+      tags:
+      - Shade
 schemes:
 - http
 - https

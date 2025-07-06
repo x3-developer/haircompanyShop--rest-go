@@ -13,6 +13,7 @@ import (
 	"haircompany-shop-rest/internal/modules/v1/image"
 	"haircompany-shop-rest/internal/modules/v1/line"
 	"haircompany-shop-rest/internal/modules/v1/product_type"
+	"haircompany-shop-rest/internal/modules/v1/shade"
 	"net/http"
 )
 
@@ -27,6 +28,7 @@ func NewRouter(cfg *config.Config, container *container.Container) http.Handler 
 	line.RegisterV1LineRoutes(v1, container)
 	product_type.RegisterV1ProductTypeRoutes(v1, container)
 	desired_result.RegisterV1DesiredResultRoutes(v1, container)
+	shade.RegisterV1ShadeRoutes(v1, container)
 
 	apiHandler := middleware.ChainMiddleware(
 		v1,

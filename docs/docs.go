@@ -1517,6 +1517,313 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/v1/shade": {
+            "get": {
+                "security": [
+                    {
+                        "AppAuth": []
+                    }
+                ],
+                "description": "Retrieve all shades",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Shade"
+                ],
+                "summary": "Get all shades",
+                "responses": {
+                    "200": {
+                        "description": "List of shades",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.ShadeList200"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Invalid X-AUTH-APP",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response403"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response500"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/shade/create": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    },
+                    {
+                        "AppAuth": []
+                    }
+                ],
+                "description": "Create a new shade",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Shade"
+                ],
+                "summary": "Create a new shade",
+                "parameters": [
+                    {
+                        "description": "Shade to create",
+                        "name": "shade",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_shade_dto.CreateDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Shade created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.ShadeCreate201"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request or Validation Error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.ShadeCreate400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Invalid X-AUTH-APP",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response403"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response500"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/shade/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "AppAuth": []
+                    }
+                ],
+                "description": "Retrieve shade by its ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Shade"
+                ],
+                "summary": "Get shade by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Shade ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Shade found",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.ShadeGetById200"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response400"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Invalid X-AUTH-APP",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response403"
+                        }
+                    },
+                    "404": {
+                        "description": "Shade not found",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response404"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response500"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/shade/{id}/delete": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    },
+                    {
+                        "AppAuth": []
+                    }
+                ],
+                "description": "Delete shade by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Shade"
+                ],
+                "summary": "Delete shade",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Shade ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Shade deleted",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.ShadeDelete200"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Invalid X-AUTH-APP",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response403"
+                        }
+                    },
+                    "404": {
+                        "description": "Shade not found",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response404"
+                        }
+                    },
+                    "409": {
+                        "description": "Shade has linked entities",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response409"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response500"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/shade/{id}/update": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    },
+                    {
+                        "AppAuth": []
+                    }
+                ],
+                "description": "Update shade by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Shade"
+                ],
+                "summary": "Update shade",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Shade ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Shade update payload",
+                        "name": "shade",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_shade_dto.UpdateDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Shade updated",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.ShadeUpdate200"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request or validation error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.ShadeUpdate400"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response401"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Invalid X-AUTH-APP",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response403"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/docsResponse.Response500"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -2253,6 +2560,119 @@ const docTemplate = `{
                 }
             }
         },
+        "docsResponse.ShadeCreate201": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_shade_dto.ResponseDTO"
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "docsResponse.ShadeCreate400": {
+            "type": "object",
+            "properties": {
+                "errorCode": {
+                    "type": "string",
+                    "enum": [
+                        "BAD_REQUEST"
+                    ]
+                },
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/docsResponse.categoryErrorField"
+                    }
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Bad request or validation error"
+                }
+            }
+        },
+        "docsResponse.ShadeDelete200": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_shade_dto.ResponseDTO"
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "docsResponse.ShadeGetById200": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_shade_dto.ResponseDTO"
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "docsResponse.ShadeList200": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_shade_dto.ResponseDTO"
+                    }
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "docsResponse.ShadeUpdate200": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/haircompany-shop-rest_internal_modules_v1_shade_dto.ResponseDTO"
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "docsResponse.ShadeUpdate400": {
+            "type": "object",
+            "properties": {
+                "errorCode": {
+                    "type": "string",
+                    "enum": [
+                        "BAD_REQUEST"
+                    ]
+                },
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/docsResponse.categoryErrorField"
+                    }
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Bad request or validation error"
+                }
+            }
+        },
         "docsResponse.authErrorField": {
             "type": "object",
             "properties": {
@@ -2718,6 +3138,76 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 255,
                     "minLength": 3
+                }
+            }
+        },
+        "haircompany-shop-rest_internal_modules_v1_shade_dto.CreateDTO": {
+            "type": "object",
+            "required": [
+                "image",
+                "name",
+                "sortIndex"
+            ],
+            "properties": {
+                "image": {
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 3
+                },
+                "sortIndex": {
+                    "type": "integer",
+                    "maximum": 9999,
+                    "minimum": 0
+                }
+            }
+        },
+        "haircompany-shop-rest_internal_modules_v1_shade_dto.ResponseDTO": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string",
+                    "example": "2023-10-01T12:00:00Z"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "image": {
+                    "type": "string",
+                    "example": "shade.png"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Shade Name"
+                },
+                "sortIndex": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "example": "2023-10-01T12:00:00Z"
+                }
+            }
+        },
+        "haircompany-shop-rest_internal_modules_v1_shade_dto.UpdateDTO": {
+            "type": "object",
+            "properties": {
+                "image": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 3
+                },
+                "sort_index": {
+                    "type": "integer",
+                    "minimum": 0
                 }
             }
         }
